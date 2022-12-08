@@ -6,7 +6,8 @@
 	<name>WebApi</name>
 	<description>Support libraries for retrofit.</description>
 	<properties>
-		<java.version>11</java.version>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 	</properties>
 
 	<distributionManagement>
