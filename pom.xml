@@ -4,6 +4,7 @@
 	<artifactId>web-api</artifactId>
 	<version>1.0.0-RELEASE</version>
 	<name>WebApi</name>
+	<description>Support libraries for retrofit.</description>
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
