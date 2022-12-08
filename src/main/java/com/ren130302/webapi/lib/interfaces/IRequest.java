@@ -1,6 +1,5 @@
 package com.ren130302.webapi.lib.interfaces;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -15,7 +14,7 @@ public interface IRequest<
 		CLIENT extends IApiClient,
 		SERVICE extends IApiService,
 		RESPONSE extends IResponse,
-		BUILDER extends IBuilder> {
+		BUILDER extends IBuilder<IRequest<CLIENT, SERVICE, RESPONSE, BUILDER>>> {
 
 	public IRequest<CLIENT, SERVICE, RESPONSE, BUILDER> params(Consumer<BUILDER> params);
 
@@ -38,58 +37,38 @@ public interface IRequest<
 	}
 
 	public default SERVICE getService() {
-		return Instance.getInstance(this.getClient().getBaseUrl(), this.getServiceClass());
+		return Instance.getInstance(this);
 	}
 
 	public Callback<RESPONSE> getCallback();
 
 	public default Map<String, String> getQueryMap() {
-		return this.getBuilder().getQueryMap();
-	}
-
-	public default IRequest<CLIENT, SERVICE, RESPONSE, BUILDER> putApi() {
-		this.getQueryMap().put(this.getClient().getApiKeyLabel(), this.getClient().getApiKeyValue());
-		return this;
-	}
-
-	public default IRequest<CLIENT, SERVICE, RESPONSE, BUILDER> putItem() {
-		this.getParams().accept(this.getBuilder());
-		return this;
-	}
-
-	public default IRequest<CLIENT, SERVICE, RESPONSE, BUILDER> removeItem() {
-		this.getQueryMap().values().removeAll(Collections.singleton(null));
-		this.getQueryMap().values().removeAll(Collections.singleton("null"));
-		return this;
-	}
-
-	public default IRequest<CLIENT, SERVICE, RESPONSE, BUILDER> queryMap() {
-		this.putApi().putItem().removeItem();
-		return this;
+		return this.getBuilder().initQuery().getQueryMap();
 	}
 
 	public default void execute() {
 		this.getUrlMethod().apply(this.getService(), this.getQueryMap()).enqueue(this.getCallback());
 	}
 
-	public default void queryExecute() {
-		this.queryMap().execute();
-	}
-
 	public static class Instance {
 		private static Retrofit mRetrofit = null;
 
-		private static <T extends IApiService> T getInstance(String baseUrl, Class<T> clazz) {
-			return singleton(baseUrl).create(clazz);
+		private static <REQUEST extends IRequest<?, SERVICE, ?, ?>, SERVICE extends IApiService> SERVICE getInstance(
+				REQUEST request) {
+			return singleton(request.getClient().getBaseUrl()).create(request.getServiceClass());
 		}
 
 		private static Retrofit singleton(String baseUrl) {
 			if (mRetrofit == null) {
-				mRetrofit = new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
-						.build();
+				mRetrofit = build(baseUrl);
 			}
 
 			return mRetrofit;
+		}
+
+		private static Retrofit build(String baseUrl) {
+			return new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create())
+					.build();
 		}
 	}
 }
