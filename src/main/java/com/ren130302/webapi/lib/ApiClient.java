@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 public final class ApiClient
 	implements IApiClient {
 
-	private final @NonNull String apiLabel;
-	private final @NonNull String apiKey;
 	private final @NonNull String baseUrl;
+	private final @NonNull String apiLabel;
+
 }

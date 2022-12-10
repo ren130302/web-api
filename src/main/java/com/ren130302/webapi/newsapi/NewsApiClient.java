@@ -21,19 +21,11 @@ public class NewsApiClient {
 	private static final String API_KEY = "bb9f2ecdbb9a4882b51cf5a4b98b86a6";
 	private static final String BASE_URL = "https://newsapi.org/";
 
-	public static ApiClient set(String apiKey) {
-		return ApiClient.set(API_LABEL, apiKey, BASE_URL);
+	public static ApiClient set() {
+		return ApiClient.set(BASE_URL, API_LABEL);
 	}
 
 	public static void main(String[] args) {
-		WebApi.executeQuery(
-				EVERYTHING, 
-				() -> API_KEY,
-				b -> b.q("trump"), 
-				() -> CallbackImpl.of(
-						r -> System.out.println(r.getArticles().get(0).getTitle()), 
-						t -> System.out.println(t.getMessage())
-						)
-		);
+		WebApi.executeQuery(EVERYTHING, () -> API_KEY, b -> b.q("trump"), () -> CallbackImpl.of(r -> System.out.println(r.getArticles().get(0).getTitle()), t -> System.out.println(t.getMessage())));
 	}
 }

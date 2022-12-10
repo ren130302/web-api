@@ -2,7 +2,6 @@ package com.ren130302.webapi.lib.interfaces;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import retrofit2.Callback;
@@ -16,12 +15,12 @@ public interface IWebApi<
 	RESPONSE extends IResponse,
 	BUILDER extends IBuilder> {
 
-	Function<String, CLIENT> clientFunction();
+	Supplier<CLIENT> clientSupplier();
 
 	Supplier<REQUEST> requestSupplier();
 
 	default void executeQuery(Supplier<String> apiKeySupplier, Consumer<BUILDER> paramsConsumer, Supplier<Callback<RESPONSE>> callbackSupplier) {
-		CLIENT client = this.clientFunction().apply(apiKeySupplier.get());
+		CLIENT client = this.clientSupplier().get();
 		REQUEST request = this.requestSupplier().get();
 		SERVICE service = Instance.getInstance(client.baseUrl(), request.serviceClass());
 		BUILDER builder = request.builder();
@@ -30,7 +29,7 @@ public interface IWebApi<
 		Map<String, String> queryMap = builder.initQuery(paramsConsumer);
 		System.out.print(this.print(client, queryMap));
 
-		client.putApi(queryMap);
+		queryMap.put(client.apiLabel(), apiKeySupplier.get());
 		request.urlMethod().apply(service, queryMap).enqueue(callback);
 
 	}

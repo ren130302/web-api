@@ -1,7 +1,6 @@
 package com.ren130302.webapi.lib;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.ren130302.webapi.lib.interfaces.IApiService;
@@ -23,12 +22,12 @@ public final class WebApi<
 	implements
 	IWebApi<ApiClient, SERVICE, ApiRequest<SERVICE, RESPONSE, BUILDER>, RESPONSE, BUILDER> {
 
-	private final @NonNull Function<String, ApiClient> clientFunction;
+	private final @NonNull Supplier<ApiClient> clientSupplier;
 	private final @NonNull Supplier<ApiRequest<SERVICE, RESPONSE, BUILDER>> requestSupplier;
 
-	private WebApi(Function<String, ApiClient> clientFunction,
+	private WebApi(Supplier<ApiClient> clientSupplier,
 			Supplier<ApiRequest<SERVICE, RESPONSE, BUILDER>> requestSupplier) {
-		this.clientFunction = clientFunction;
+		this.clientSupplier = clientSupplier;
 		this.requestSupplier = requestSupplier;
 	}
 
