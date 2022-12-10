@@ -3,7 +3,7 @@ package com.ren130302.webapi.newsapi;
 import java.util.function.Supplier;
 
 import com.ren130302.webapi.lib.ApiClient;
-import com.ren130302.webapi.lib.CallbackImpl;
+import com.ren130302.webapi.lib.ExtendsCallback;
 import com.ren130302.webapi.lib.WebApi;
 import com.ren130302.webapi.newsapi.request.Everything;
 import com.ren130302.webapi.newsapi.request.Sources;
@@ -26,6 +26,6 @@ public class NewsApiClient {
 	}
 
 	public static void main(String[] args) {
-		WebApi.executeQuery(EVERYTHING, () -> API_KEY, b -> b.q("trump"), () -> CallbackImpl.of(r -> System.out.println(r.getArticles().get(0).getTitle()), t -> System.out.println(t.getMessage())));
+		WebApi.executeQuery(EVERYTHING, () -> API_KEY, b -> b.q("trump"), () -> ExtendsCallback.onSuccess((c, r) -> System.out.println(r.getArticles().get(0).getTitle()), (c, t) -> System.out.println(t.getMessage())));
 	}
 }
