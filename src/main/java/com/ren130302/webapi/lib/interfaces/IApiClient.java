@@ -1,9 +1,15 @@
 package com.ren130302.webapi.lib.interfaces;
 
+import java.util.Map;
+
 public interface IApiClient {
-	public String getApiKeyLabel();
+	String apiLabel();
 
-	public String getApiKeyValue();
+	String apiKey();
 
-	public String getBaseUrl();
+	String baseUrl();
+
+	default void putApi(Map<String, String> map) {
+		map.put(this.apiLabel(), this.apiKey());
+	}
 }

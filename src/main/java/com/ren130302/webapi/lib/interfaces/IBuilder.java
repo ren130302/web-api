@@ -1,43 +1,42 @@
 package com.ren130302.webapi.lib.interfaces;
 
-import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-public interface IBuilder<REQUEST extends IRequest> {
+public interface IBuilder {
 
-	public REQUEST getRequest();
+	Map<String, String> getQueryMap();
 
-	public Map<String, String> getQueryMap();
-
-	public default IBuilder<REQUEST> put(String key, String value) {
+	@SuppressWarnings("unchecked")
+	default <
+		BUILDER extends IBuilder> BUILDER put(String key, String value) {
 		this.getQueryMap().put(key, value);
-		return this;
+		return (BUILDER) this;
 	}
 
-	public default IBuilder<REQUEST> clear() {
-		this.getQueryMap().clear();
-		return this;
+	@SuppressWarnings("unchecked")
+	default <
+		BUILDER extends IBuilder> BUILDER remove(Predicate<? super String> filter) {
+		this.getQueryMap().values().removeIf(filter);
+		return (BUILDER) this;
 	}
 
-	public default IBuilder<REQUEST> putApi() {
-		return this.put(this.getRequest().getClient().getApiKeyLabel(), this.getRequest().getClient().getApiKeyValue());
+	@SuppressWarnings("unchecked")
+	default <
+		BUILDER extends IBuilder> BUILDER putItems(Consumer<BUILDER> consumer) {
+		consumer.accept((BUILDER) this);
+		return (BUILDER) this;
 	}
 
-	public default IBuilder<REQUEST> putItems() {
-		this.getRequest().getParams().accept(this.getRequest().getBuilder());
-		return this;
+	default <
+		BUILDER extends IBuilder> BUILDER removeItems() {
+		return this.remove(String::isEmpty).remove(String::isBlank).remove(Objects::isNull);
 	}
 
-	public default IBuilder<REQUEST> remove(Object value) {
-		this.getQueryMap().values().removeAll(Collections.singleton(value));
-		return this;
-	}
-
-	public default IBuilder<REQUEST> removeItems() {
-		return this.remove(null).remove("null");
-	}
-
-	public default IBuilder<REQUEST> initQuery() {
-		return this.clear().putApi().putItems().removeItems();
+	default <
+		BUILDER extends IBuilder> Map<String, String> initQuery(Consumer<BUILDER> consumer) {
+		return this.putItems(consumer).removeItems().getQueryMap();
 	}
 }

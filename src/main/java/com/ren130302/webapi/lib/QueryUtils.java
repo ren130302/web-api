@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 import com.ren130302.webapi.lib.interfaces.IEnumItem;
 
 public class QueryUtils {
-	public static <T extends IEnumItem<?>> String enums(T[] enums) {
+	public static <
+		T extends IEnumItem<?>> String enums(T[] enums) {
 		return strings(Arrays.asList(enums).stream().map(IEnumItem::getName).collect(Collectors.toList()));
 	}
 
