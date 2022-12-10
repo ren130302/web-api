@@ -5,8 +5,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import lombok.NonNull;
 import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public interface IWebApi<
 	CLIENT extends IApiClient,
@@ -15,39 +16,22 @@ public interface IWebApi<
 	RESPONSE extends IResponse,
 	BUILDER extends IBuilder> {
 
-	@NonNull
 	Function<String, CLIENT> clientFunction();
 
-	@NonNull
 	Supplier<REQUEST> requestSupplier();
 
-	@NonNull
-	default REQUEST request() {
-		return this.requestSupplier().get();
-	}
-
-	@NonNull
-	CLIENT client();
-
-	@NonNull
-	SERVICE service();
-
-	@NonNull
-	IParamSupplier<RESPONSE, BUILDER> paramSupplier();
-
-	default void executeQuery() {
-		CLIENT client = this.client();
-		REQUEST request = this.request();
+	default void executeQuery(Supplier<String> apiKeySupplier, Consumer<BUILDER> paramsConsumer, Supplier<Callback<RESPONSE>> callbackSupplier) {
+		CLIENT client = this.clientFunction().apply(apiKeySupplier.get());
+		REQUEST request = this.requestSupplier().get();
+		SERVICE service = Instance.getInstance(client.baseUrl(), request.serviceClass());
 		BUILDER builder = request.builder();
 
-		Consumer<BUILDER> params = this.paramSupplier().paramsConsumer();
-		Callback<RESPONSE> callback = this.paramSupplier().callbackSupplier().get();
-
-		Map<String, String> queryMap = builder.initQuery(params);
+		Callback<RESPONSE> callback = callbackSupplier.get();
+		Map<String, String> queryMap = builder.initQuery(paramsConsumer);
 		System.out.print(this.print(client, queryMap));
 
 		client.putApi(queryMap);
-		request.urlMethod().apply(this.service(), queryMap).enqueue(callback);
+		request.urlMethod().apply(service, queryMap).enqueue(callback);
 
 	}
 
@@ -57,5 +41,26 @@ public interface IWebApi<
 		buf.append(String.format("%s : %s \n", client.apiLabel(), "***"));
 		queryMap.forEach((k, v) -> buf.append(String.format("%s : %s \n", k, v)));
 		return buf.toString();
+	}
+
+	public static class Instance {
+		private static Retrofit mRetrofit;
+
+		private static <
+			SERVICE extends IApiService> SERVICE getInstance(String baseUrl, Class<SERVICE> serviceClass) {
+			return singleton(baseUrl).create(serviceClass);
+		}
+
+		private static Retrofit singleton(String baseUrl) {
+			if (mRetrofit == null) {
+				mRetrofit = build(baseUrl);
+			}
+
+			return mRetrofit;
+		}
+
+		private static Retrofit build(String baseUrl) {
+			return new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build();
+		}
 	}
 }
