@@ -36,7 +36,7 @@ public class Sources {
 		 * @see NewsCategory
 		 */
 		public Builder category(NewsCategory... category) {
-			return this.put("category", QueryUtils.enums(category, NewsCategory.values()));
+			return this.put("category", QueryUtils.enumValue(category, NewsCategory.values()));
 		}
 
 		/**
@@ -46,7 +46,7 @@ public class Sources {
 		 * @see NewsLanguage
 		 */
 		public Builder language(NewsLanguage... language) {
-			return this.put("language", QueryUtils.enums(language, NewsLanguage.values()));
+			return this.put("language", QueryUtils.enumValue(language, NewsLanguage.values()));
 		}
 
 		/**
@@ -57,7 +57,7 @@ public class Sources {
 		 * @see NewsCountry
 		 */
 		public Builder country(NewsCountry... country) {
-			return this.put("country", QueryUtils.enums(country, NewsCountry.values()));
+			return this.put("country", QueryUtils.enumValue(country, NewsCountry.values()));
 		}
 	}
 
@@ -69,10 +69,10 @@ public class Sources {
 			return b -> b.category(this.getCategories()).country(this.getCountries()).language(this.getLanguages());
 		}
 
-		private NewsCategory[] categories = NewsCategory.values();
+		private NewsCategory[] categories = null;
 
-		private NewsLanguage[] languages = NewsLanguage.values();
+		private NewsLanguage[] languages = null;
 
-		private NewsCountry[] countries = NewsCountry.values();
+		private NewsCountry[] countries = null;
 	}
 }

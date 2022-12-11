@@ -24,9 +24,4 @@ public enum NewsSort
 
 	private final Byte id;
 	private final String name;
-
-	private NewsSort() {
-		this.id = (byte) this.ordinal();
-		this.name = this.name().toLowerCase();
-	}
 }

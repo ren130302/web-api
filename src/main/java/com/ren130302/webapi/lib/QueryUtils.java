@@ -4,23 +4,37 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.ren130302.webapi.lib.interfaces.IEnumItem;
 
 public class QueryUtils {
 	public static <
-		T extends IEnumItem<?>> String enums(T value, T defaultValue) {
-		final T _value = Objects.nonNull(value) ? value : defaultValue;
+		T extends IEnumItem<?>> String enumValue(T value, T defaultValue) {
 
-		return strings(Arrays.asList(_value).stream().map(IEnumItem::getName).collect(Collectors.toList()));
+		return valueOf(IEnumItem::getName, Objects.nonNull(value) ? value : defaultValue);
 	}
 
 	public static <
-		T extends IEnumItem<?>> String enums(T[] values, T[] defaultValues) {
-		final T[] _values = Objects.nonNull(values) ? values : defaultValues;
+		T extends IEnumItem<?>> String enumValue(T[] values, T[] defaultValues) {
+		return valueOf(IEnumItem::getName, Objects.nonNull(values) ? values : defaultValues);
+	}
 
-		return strings(Arrays.asList(_values).stream().map(IEnumItem::getName).collect(Collectors.toList()));
+	public static <
+		T extends Number> String numValue(T value, T defaultValue) {
+		return valueOf(String::valueOf, Objects.nonNull(value) ? value : defaultValue);
+	}
+
+	public static <
+		T extends Number> String numValue(T[] values, T[] defaultValues) {
+		return valueOf(String::valueOf, Objects.nonNull(values) ? values : defaultValues);
+	}
+
+	@SafeVarargs
+	public static <
+		T> String valueOf(Function<? super T, ? extends String> mapper, T... item) {
+		return strings(Arrays.asList(item).stream().map(mapper).collect(Collectors.toList()));
 	}
 
 	public static String strings(String[] arrays) {

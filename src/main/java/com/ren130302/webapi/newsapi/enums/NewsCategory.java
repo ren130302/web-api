@@ -19,9 +19,4 @@ public enum NewsCategory
 
 	private final Byte id;
 	private final String name;
-
-	private NewsCategory() {
-		this.id = (byte) this.ordinal();
-		this.name = this.name().toLowerCase();
-	}
 }

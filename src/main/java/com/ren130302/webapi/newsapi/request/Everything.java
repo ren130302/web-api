@@ -108,7 +108,7 @@ public class Everything {
 		 * Default: all languages returned.<br>
 		 */
 		public Builder language(NewsLanguage... language) {
-			return this.put("language", QueryUtils.enums(language, NewsLanguage.values()));
+			return this.put("language", QueryUtils.enumValue(language, NewsLanguage.values()));
 		}
 
 		/**
@@ -117,7 +117,7 @@ public class Everything {
 		 * Default: publishedAt.<br>
 		 */
 		public Builder sortBy(NewsSort sortBy) {
-			return this.put("sortBy", QueryUtils.enums(sortBy, NewsSort.PUBLISHED_AT));
+			return this.put("sortBy", QueryUtils.enumValue(sortBy, NewsSort.PUBLISHED_AT));
 		}
 
 		/**
@@ -125,8 +125,8 @@ public class Everything {
 		 * <br>
 		 * Default: 100. Max: 100.<br>
 		 */
-		public Builder pageSize(int pageSize) {
-			return this.put("pageSize", String.valueOf(pageSize));
+		public Builder pageSize(Integer pageSize) {
+			return this.put("pageSize", QueryUtils.numValue(pageSize, 100));
 		}
 
 		/**
@@ -134,8 +134,8 @@ public class Everything {
 		 * <br>
 		 * Default: 1.Min:1<br>
 		 */
-		public Builder page(int page) {
-			return this.put("page", String.valueOf(page));
+		public Builder page(Integer page) {
+			return this.put("page", QueryUtils.numValue(page, 1));
 		}
 
 		/**
@@ -151,7 +151,7 @@ public class Everything {
 		 * Default: all fields are searched.
 		 */
 		public Builder searchIn(NewsSearchIn... searchIn) {
-			return this.put("searchIn", QueryUtils.enums(searchIn, NewsSearchIn.values()));
+			return this.put("searchIn", QueryUtils.enumValue(searchIn, NewsSearchIn.values()));
 		}
 	}
 
@@ -160,39 +160,29 @@ public class Everything {
 		implements IForm<Everything.Builder> {
 		@Override
 		public Consumer<Everything.Builder> wrap() {
-			return b -> b.q(this.getQ())
-					.page(this.getPage())
-					.pageSize(this.getPageSize())
-					.includeDomains(this.getIncludeDomains())
-					.excludeDomains(this.getExcludeDoamins())
-					.sources(this.getSources())
-					.language(this.getLanguages())
-					.searchIn(this.getSearchIns())
-					.from(this.getFrom().toString())
-					.to(this.getTo().toString())
-					.sortBy(this.getSortBy());
+			return b -> b.q(this.getQ()).page(this.getPage()).pageSize(this.getPageSize()).includeDomains(this.getIncludeDomains()).excludeDomains(this.getExcludeDoamins()).sources(this.getSources()).language(this.getLanguages()).searchIn(this.getSearchIns()).from(this.getFrom().toString()).to(this.getTo().toString()).sortBy(this.getSortBy());
 		}
 
-		private String q;
+		private String q = null;
 
-		private NewsSearchIn[] searchIns = NewsSearchIn.values();
+		private NewsSearchIn[] searchIns = null;
 
-		private String[] sources;
+		private String[] sources = null;
 
-		private String[] includeDomains;
+		private String[] includeDomains = null;
 
-		private String[] excludeDoamins;
+		private String[] excludeDoamins = null;
 
-		private LocalDateTime from;
+		private LocalDateTime from = null;
 
-		private LocalDateTime to;
+		private LocalDateTime to = null;
 
-		private NewsLanguage[] languages = NewsLanguage.values();
+		private NewsLanguage[] languages = null;
 
-		private NewsSort sortBy = NewsSort.PUBLISHED_AT;
+		private NewsSort sortBy = null;
 
-		private int pageSize = 100;
+		private Integer pageSize = null;
 
-		private int page = 1;
+		private Integer page = null;
 	}
 }

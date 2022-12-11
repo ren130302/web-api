@@ -56,7 +56,7 @@ public class TopHeadlines {
 		 * @see NewsCategory
 		 */
 		public Builder category(NewsCategory... category) {
-			return this.put("category", QueryUtils.enums(category, NewsCategory.values()));
+			return this.put("category", QueryUtils.enumValue(category, NewsCategory.values()));
 		}
 
 		/**
@@ -79,7 +79,7 @@ public class TopHeadlines {
 		 * @see NewsCountry
 		 */
 		public Builder country(NewsCountry... country) {
-			return this.put("country", QueryUtils.enums(country, NewsCountry.values()));
+			return this.put("country", QueryUtils.enumValue(country, NewsCountry.values()));
 		}
 
 		/**
@@ -87,8 +87,8 @@ public class TopHeadlines {
 		 * <br>
 		 * Default: 100. Max: 100.<br>
 		 */
-		public Builder pageSize(int pageSize) {
-			return this.put("pageSize", String.valueOf(pageSize));
+		public Builder pageSize(Integer pageSize) {
+			return this.put("pageSize", QueryUtils.numValue(pageSize, 100));
 		}
 
 		/**
@@ -96,8 +96,8 @@ public class TopHeadlines {
 		 * <br>
 		 * Default: 1.Min:1<br>
 		 */
-		public Builder page(int page) {
-			return this.put("page", String.valueOf(page));
+		public Builder page(Integer page) {
+			return this.put("page", QueryUtils.numValue(page, 1));
 		}
 
 		/**
@@ -108,7 +108,7 @@ public class TopHeadlines {
 		 * @see NewsLanguage
 		 */
 		public Builder language(NewsLanguage... language) {
-			return this.put("language", QueryUtils.enums(language, NewsLanguage.values()));
+			return this.put("language", QueryUtils.enumValue(language, NewsLanguage.values()));
 		}
 	}
 
@@ -120,18 +120,18 @@ public class TopHeadlines {
 			return b -> b.q(this.getQ()).category(this.getCategories()).country(this.getCountries()).sources(this.getSources()).pageSize(this.getPageSize()).page(this.getPage());
 		}
 
-		private String q;
+		private String q = null;
 
-		private NewsCountry[] countries = NewsCountry.values();
+		private NewsCountry[] countries = null;
 
-		private NewsCategory[] categories = NewsCategory.values();
+		private NewsCategory[] categories = null;
 
-		private NewsLanguage[] languages = NewsLanguage.values();
+		private NewsLanguage[] languages = null;
 
-		private String[] sources;
+		private String[] sources = null;
 
-		private int pageSize = 100;
+		private Integer pageSize = null;
 
-		private int page = 1;
+		private Integer page = null;
 	}
 }

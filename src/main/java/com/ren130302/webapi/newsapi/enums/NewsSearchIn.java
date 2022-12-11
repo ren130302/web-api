@@ -15,9 +15,4 @@ public enum NewsSearchIn
 
 	private final Byte id;
 	private final String name;
-
-	private NewsSearchIn() {
-		this.id = (byte) this.ordinal();
-		this.name = this.name().toLowerCase();
-	}
 }
