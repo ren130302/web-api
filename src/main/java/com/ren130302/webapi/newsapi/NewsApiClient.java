@@ -44,7 +44,8 @@ public class NewsApiClient {
 	public static void main(String[] args) {
 		NewsApiClient.executeQuery(
 				EVERYTHING, 
-				() -> API_KEY, b -> b.q("trump"), 
+				() -> API_KEY, 
+				b -> b.q("trump"), 
 				() -> ExtendsCallback.onSuccess(
 						(c, r) -> System.out.println(r.getArticles().get(0).getTitle()), 
 						(c, t) -> System.out.println(t.getMessage())
