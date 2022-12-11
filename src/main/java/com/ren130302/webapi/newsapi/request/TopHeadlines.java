@@ -55,8 +55,8 @@ public class TopHeadlines {
 		 *
 		 * @see NewsCategory
 		 */
-		public Builder category(NewsCategory... category) {
-			return this.put("category", QueryUtils.enumValue(category, NewsCategory.values()));
+		public Builder categories(NewsCategory... categories) {
+			return this.put("category", QueryUtils.enumValue(categories, NewsCategory.values()));
 		}
 
 		/**
@@ -78,8 +78,8 @@ public class TopHeadlines {
 		 *
 		 * @see NewsCountry
 		 */
-		public Builder country(NewsCountry... country) {
-			return this.put("country", QueryUtils.enumValue(country, NewsCountry.values()));
+		public Builder countries(NewsCountry... countries) {
+			return this.put("country", QueryUtils.enumValue(countries, NewsCountry.values()));
 		}
 
 		/**
@@ -107,8 +107,8 @@ public class TopHeadlines {
 		 *
 		 * @see NewsLanguage
 		 */
-		public Builder language(NewsLanguage... language) {
-			return this.put("language", QueryUtils.enumValue(language, NewsLanguage.values()));
+		public Builder languages(NewsLanguage... languages) {
+			return this.put("language", QueryUtils.enumValue(languages, NewsLanguage.values()));
 		}
 	}
 
@@ -117,7 +117,7 @@ public class TopHeadlines {
 		implements IForm<TopHeadlines.Builder> {
 		@Override
 		public Consumer<TopHeadlines.Builder> wrap() {
-			return b -> b.q(this.getQ()).category(this.getCategories()).country(this.getCountries()).sources(this.getSources()).pageSize(this.getPageSize()).page(this.getPage());
+			return b -> b.q(this.getQ()).categories(this.getCategories()).countries(this.getCountries()).sources(this.getSources()).pageSize(this.getPageSize()).page(this.getPage());
 		}
 
 		private String q = null;

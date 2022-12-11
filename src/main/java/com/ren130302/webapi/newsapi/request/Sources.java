@@ -35,8 +35,8 @@ public class Sources {
 		 *
 		 * @see NewsCategory
 		 */
-		public Builder category(NewsCategory... category) {
-			return this.put("category", QueryUtils.enumValue(category, NewsCategory.values()));
+		public Builder categories(NewsCategory... categories) {
+			return this.put("category", QueryUtils.enumValue(categories, NewsCategory.values()));
 		}
 
 		/**
@@ -45,8 +45,8 @@ public class Sources {
 		 *
 		 * @see NewsLanguage
 		 */
-		public Builder language(NewsLanguage... language) {
-			return this.put("language", QueryUtils.enumValue(language, NewsLanguage.values()));
+		public Builder languages(NewsLanguage... languages) {
+			return this.put("language", QueryUtils.enumValue(languages, NewsLanguage.values()));
 		}
 
 		/**
@@ -56,8 +56,8 @@ public class Sources {
 		 *
 		 * @see NewsCountry
 		 */
-		public Builder country(NewsCountry... country) {
-			return this.put("country", QueryUtils.enumValue(country, NewsCountry.values()));
+		public Builder countries(NewsCountry... countries) {
+			return this.put("country", QueryUtils.enumValue(countries, NewsCountry.values()));
 		}
 	}
 
@@ -66,7 +66,7 @@ public class Sources {
 		implements IForm<Sources.Builder> {
 		@Override
 		public Consumer<Sources.Builder> wrap() {
-			return b -> b.category(this.getCategories()).country(this.getCountries()).language(this.getLanguages());
+			return b -> b.categories(this.getCategories()).countries(this.getCountries()).languages(this.getLanguages());
 		}
 
 		private NewsCategory[] categories = null;
