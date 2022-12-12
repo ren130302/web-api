@@ -43,7 +43,9 @@ public class NewsApiClient {
 	}
 
 	public static void main(String[] args) {
-		NewsApiClient.executeQuery(EVERYTHING, () -> API_KEY, b -> b.q("trump"), () -> ExtendsCallback.onSuccess((c, r) -> System.out.println(r.getArticles().get(0).getTitle()), (c, t) -> System.out.println(t.getMessage())));
+		NewsApiClient.executeQuery(EVERYTHING, () -> API_KEY, b -> b.q("trump"), () -> ExtendsCallback.onSuccess((c, r) -> {
+			Article article = r.getArticles().get(0);
+		}, (c, t) -> System.out.println(t.getMessage())));
 
 		NewsApiClient.executeQuery(TOP_HEADLINES, () -> API_KEY, b -> b.q("bitcoin").languages(NewsLanguage.EN), () -> ExtendsCallback.onSuccess((c, r) -> System.out.println(r.getArticles().get(0).getTitle()), (c, t) -> System.out.println(t.getMessage())));
 
