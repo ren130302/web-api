@@ -19,6 +19,11 @@
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
+<!--		<repository>
+			<id>github</id>
+			<name>GitHub OWNER Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/ren130302/web-api</url>
+		</repository> -->
 	</distributionManagement>
 	<build>
 		<plugins>
