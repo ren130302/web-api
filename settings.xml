@@ -6,4 +6,16 @@
 			<password>vpiE2ifRRMvQD6lpWV9nN0oG4M0MFLjNsvdsHwL5PASj</password>
 		</server>
 	</servers>
+	<profiles>
+		<profile>
+			<id>ossrh</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<gpg.executable>gpg2</gpg.executable>
+				<gpg.passphrase>hro1n3d0a3r0e2n</gpg.passphrase>
+			</properties>
+		</profile>
+	</profiles>
 </settings>

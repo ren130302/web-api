@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.ren130302</groupId>
 	<artifactId>web-api</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>WebApi</name>
 	<description>Support libraries for retrofit.</description>
 	<properties>
@@ -22,7 +22,6 @@
 	</distributionManagement>
 	<build>
 		<plugins>
-
 			<!-- sonatype release -->
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
@@ -77,31 +76,14 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-						<configuration>
-							<keyname>${gpg.keyname}</keyname>
-							<passphraseServerId>${gpg.keyname}</passphraseServerId>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 	<scm>
 		<connection>scm:git:https://github.com/ren130302/web-api.git</connection>
 		<developerConnection>scm:git:https://github.com/ren130302/web-api.git</developerConnection>
 		<url>https://github.com/ren130302/web-api</url>
-	</scm>
+	  <tag>web-api-1.0.0</tag>
+  </scm>
 
 	<dependencies>
 		<dependency>
