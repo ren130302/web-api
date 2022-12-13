@@ -14,6 +14,10 @@ import retrofit2.Retrofit;
 public final class ApiClient
 	implements IApiClient {
 
-	private final @NonNull String apiLabel;
+	private final String apiLabel;
 	private final @NonNull Function<Retrofit.Builder, Retrofit.Builder> retrofitBuilderFunction;
+
+	public static ApiClient set(Function<Retrofit.Builder, Retrofit.Builder> retrofitBuilderFunction) {
+		return set(null, retrofitBuilderFunction);
+	}
 }

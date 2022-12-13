@@ -1,7 +1,6 @@
 package com.ren130302.webapi.lib;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -34,22 +33,14 @@ public class QueryUtils {
 	@SafeVarargs
 	public static <
 		T> String valueOf(Function<? super T, ? extends String> mapper, T... item) {
-		return strings(Arrays.asList(item).stream().map(mapper).collect(Collectors.toList()));
+		return join(Arrays.asList(item).stream().map(mapper).collect(Collectors.toList()));
 	}
 
 	public static String strings(String[] arrays) {
-		return strings(Arrays.asList(arrays));
+		return join(Arrays.asList(arrays));
 	}
 
-	public static String strings(List<String> list) {
-		StringBuffer buf = new StringBuffer();
-
-		Iterator<String> values = list.iterator();
-
-		while (values.hasNext()) {
-			buf.append(values.next() + (values.hasNext() ? "," : ""));
-		}
-
-		return buf.toString();
+	public static String join(List<String> list) {
+		return String.join(",", list);
 	}
 }

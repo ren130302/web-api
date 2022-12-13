@@ -19,7 +19,7 @@ import com.ren130302.webapi.newsapi.response.Article;
 import com.ren130302.webapi.newsapi.response.Source;
 
 import retrofit2.Callback;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsApiClient {
 
@@ -32,7 +32,7 @@ public class NewsApiClient {
 	private static final String API_KEY = "bb9f2ecdbb9a4882b51cf5a4b98b86a6";
 
 	public static ApiClient set() {
-		return ApiClient.set(API_LABEL, b -> b.baseUrl(BASE_URL).addConverterFactory(JacksonConverterFactory.create()));
+		return ApiClient.set(API_LABEL, b -> b.baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()));
 	}
 
 	public static <

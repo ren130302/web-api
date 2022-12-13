@@ -1,6 +1,7 @@
 package com.ren130302.webapi.lib.interfaces;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -33,8 +34,9 @@ public interface IWebApi<
 		Map<String, String> queryMap = builder.initQuery(paramsConsumer);
 
 		System.out.print(this.print(retrofit, client, queryMap));
-
-		queryMap.put(client.apiLabel(), apiKeySupplier.get());
+		if (Objects.nonNull(client.apiLabel())) {
+			queryMap.put(client.apiLabel(), apiKeySupplier.get());
+		}
 		Call<RESPONSE> call = request.urlMethod().apply(service, queryMap);
 		call.enqueue(callback);
 
