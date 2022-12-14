@@ -18,5 +18,4 @@ public class SearchResponse {
 
 	@JsonProperty("videos")
 	public List<VideoResponse> videos;
-
 }

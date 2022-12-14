@@ -1,33 +1,20 @@
 package com.ren130302.webapi.newsapi.request;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ren130302.webapi.lib.ApiRequest;
+import com.ren130302.webapi.lib.ApiBuilder;
 import com.ren130302.webapi.lib.QueryUtils;
-import com.ren130302.webapi.lib.interfaces.IBuilder;
 import com.ren130302.webapi.lib.interfaces.IForm;
-import com.ren130302.webapi.newsapi.NewsApiService;
 import com.ren130302.webapi.newsapi.enums.NewsCategory;
 import com.ren130302.webapi.newsapi.enums.NewsCountry;
 import com.ren130302.webapi.newsapi.enums.NewsLanguage;
-import com.ren130302.webapi.newsapi.response.Source;
-import com.ren130302.webapi.newsapi.response.Source.Response;
 
 import lombok.Data;
-import lombok.Value;
 
-public class Sources {
+public final class Sources {
 
-	public static ApiRequest<NewsApiService, Source.Response, Sources.Builder> create() {
-		return ApiRequest.create(NewsApiService.class, Builder::new, Response::new, NewsApiService::getSources);
-	}
-
-	@Value
 	public static class Builder
-		implements IBuilder {
-		private final Map<String, String> queryMap = new HashMap<>();
+		extends ApiBuilder {
 
 		/**
 		 * Find sources that display news of this category. <br>

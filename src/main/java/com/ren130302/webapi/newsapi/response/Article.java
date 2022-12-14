@@ -2,8 +2,6 @@ package com.ren130302.webapi.newsapi.response;
 
 import java.util.List;
 
-import com.ren130302.webapi.lib.interfaces.IResponse;
-
 import lombok.Data;
 
 @Data
@@ -18,8 +16,7 @@ public class Article {
 	private String content;
 
 	@Data
-	public static class Response
-		implements IResponse {
+	public static class Response {
 		private String status;
 		private int totalResults;
 		private List<Article> articles;

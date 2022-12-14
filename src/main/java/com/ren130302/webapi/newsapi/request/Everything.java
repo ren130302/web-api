@@ -1,34 +1,21 @@
 package com.ren130302.webapi.newsapi.request;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ren130302.webapi.lib.ApiRequest;
+import com.ren130302.webapi.lib.ApiBuilder;
 import com.ren130302.webapi.lib.QueryUtils;
-import com.ren130302.webapi.lib.interfaces.IBuilder;
 import com.ren130302.webapi.lib.interfaces.IForm;
-import com.ren130302.webapi.newsapi.NewsApiService;
 import com.ren130302.webapi.newsapi.enums.NewsLanguage;
 import com.ren130302.webapi.newsapi.enums.NewsSearchIn;
 import com.ren130302.webapi.newsapi.enums.NewsSort;
-import com.ren130302.webapi.newsapi.response.Article;
-import com.ren130302.webapi.newsapi.response.Article.Response;
 
 import lombok.Data;
-import lombok.Value;
 
-public class Everything {
+public final class Everything {
 
-	public static ApiRequest<NewsApiService, Article.Response, Everything.Builder> create() {
-		return ApiRequest.create(NewsApiService.class, Builder::new, Response::new, NewsApiService::getEverything);
-	}
-
-	@Value
 	public static class Builder
-		implements IBuilder {
-		private final Map<String, String> queryMap = new HashMap<>();
+		extends ApiBuilder {
 
 		/**
 		 * Keywords or phrases to search for in the article title and body.<br>
@@ -156,7 +143,7 @@ public class Everything {
 	}
 
 	@Data
-	public class Form
+	public static class Form
 		implements IForm<Everything.Builder> {
 		@Override
 		public Consumer<Everything.Builder> wrap() {

@@ -1,33 +1,20 @@
 package com.ren130302.webapi.newsapi.request;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ren130302.webapi.lib.ApiRequest;
+import com.ren130302.webapi.lib.ApiBuilder;
 import com.ren130302.webapi.lib.QueryUtils;
-import com.ren130302.webapi.lib.interfaces.IBuilder;
 import com.ren130302.webapi.lib.interfaces.IForm;
-import com.ren130302.webapi.newsapi.NewsApiService;
 import com.ren130302.webapi.newsapi.enums.NewsCategory;
 import com.ren130302.webapi.newsapi.enums.NewsCountry;
 import com.ren130302.webapi.newsapi.enums.NewsLanguage;
-import com.ren130302.webapi.newsapi.response.Article;
-import com.ren130302.webapi.newsapi.response.Article.Response;
 
 import lombok.Data;
-import lombok.Value;
 
-public class TopHeadlines {
+public final class TopHeadlines {
 
-	public static ApiRequest<NewsApiService, Article.Response, TopHeadlines.Builder> create() {
-		return ApiRequest.create(NewsApiService.class, Builder::new, Response::new, NewsApiService::getTopHeadlines);
-	}
-
-	@Value
 	public static class Builder
-		implements IBuilder {
-		private final Map<String, String> queryMap = new HashMap<>();
+		extends ApiBuilder {
 
 		/**
 		 * Keywords or phrases to search for in the article title and body.<br>
@@ -113,7 +100,7 @@ public class TopHeadlines {
 	}
 
 	@Data
-	public class Form
+	public static class Form
 		implements IForm<TopHeadlines.Builder> {
 		@Override
 		public Consumer<TopHeadlines.Builder> wrap() {

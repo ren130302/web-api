@@ -4,8 +4,6 @@ import java.net.HttpURLConnection;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import com.ren130302.webapi.lib.interfaces.IResponse;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -13,7 +11,7 @@ import retrofit2.Response;
 public class ExtendsCallback {
 
 	public static <
-		RESPONSE extends IResponse> Callback<RESPONSE> onResponse(BiConsumer<Call<RESPONSE>, Response<RESPONSE>> responseConsumer, BiConsumer<Call<RESPONSE>, Throwable> failureConsumer) {
+		RESPONSE> Callback<RESPONSE> onResponse(BiConsumer<Call<RESPONSE>, Response<RESPONSE>> responseConsumer, BiConsumer<Call<RESPONSE>, Throwable> failureConsumer) {
 		return new Callback<>() {
 			@Override
 			public void onResponse(Call<RESPONSE> call, Response<RESPONSE> response) {
@@ -28,7 +26,7 @@ public class ExtendsCallback {
 	}
 
 	public static <
-		RESPONSE extends IResponse> Callback<RESPONSE> onSuccess(BiConsumer<Call<RESPONSE>, RESPONSE> successConsumer, BiConsumer<Call<RESPONSE>, Throwable> failureConsumer) {
+		RESPONSE> Callback<RESPONSE> onSuccess(BiConsumer<Call<RESPONSE>, RESPONSE> successConsumer, BiConsumer<Call<RESPONSE>, Throwable> failureConsumer) {
 		return new Callback<>() {
 			@Override
 			public void onResponse(Call<RESPONSE> call, Response<RESPONSE> response) {

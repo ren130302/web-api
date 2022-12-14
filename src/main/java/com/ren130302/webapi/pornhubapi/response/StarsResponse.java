@@ -1,4 +1,3 @@
-
 package com.ren130302.webapi.pornhubapi.response;
 
 import java.util.List;
@@ -14,31 +13,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 		"stars"
 })
 @Generated("jsonschema2pojo")
-public class StarDetailedResponse {
+public class StarsResponse {
 
-	@JsonProperty("star")
-	public List<Star> stars = null;
+	@JsonProperty("star_name")
+	public List<Star> stars;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonPropertyOrder({
-			"star_name",
-			"star_thumb",
-			"star_url",
-			"gender",
-			"videos_count_all"
+			"stars"
 	})
 	@Generated("jsonschema2pojo")
 	public class Star {
 
 		@JsonProperty("star_name")
 		public String starName;
-		@JsonProperty("star_thumb")
-		public String starThumb;
-		@JsonProperty("star_url")
-		public String starUrl;
-		@JsonProperty("gender")
-		public String gender;
-		@JsonProperty("videos_count_all")
-		public String videosCountAll;
+
 	}
 }

@@ -2,15 +2,18 @@ package com.ren130302.webapi.pornhubapi;
 
 import java.util.Map;
 
-import com.ren130302.webapi.lib.interfaces.IApiService;
-import com.ren130302.webapi.newsapi.response.Source;
+import com.ren130302.webapi.pornhubapi.response.CategoriesResponse;
+import com.ren130302.webapi.pornhubapi.response.SearchResponse;
+import com.ren130302.webapi.pornhubapi.response.StarsDetailedResponse;
+import com.ren130302.webapi.pornhubapi.response.StarsResponse;
+import com.ren130302.webapi.pornhubapi.response.TagsResponse;
+import com.ren130302.webapi.pornhubapi.response.VideoResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 
-public interface PornhubApiService
-	extends IApiService {
+public interface PornhubApiService {
 	/**
 	 *
 	 * :param id: id of requested video <br>
@@ -22,28 +25,28 @@ public interface PornhubApiService
 	 * @returnVideo
 	 */
 	@GET("/video_by_id")
-	Call<Source.Response> getVideoById(@QueryMap Map<String, String> query);
+	Call<VideoResponse> getVideoById(@QueryMap Map<String, String> query);
 
 	/**
-	 * :param id_: id of requested video <br>
+	 * :param id: id of requested video <br>
 	 *
 	 * @param query
 	 * @return
 	 */
 	@GET("/is_video_active")
-	Call<Source.Response> isVideoActive(@QueryMap Map<String, String> query);
+	Call<VideoResponse> isVideoActive(@QueryMap Map<String, String> query);
 
 	@GET("/categories")
-	Call<Void> getCategories();
+	Call<CategoriesResponse> getCategories();
 
 	@GET("/tags")
-	Call<Void> getTags();
+	Call<TagsResponse> getTags();
 
 	@GET("/stars")
-	Call<Void> getStarts();
+	Call<StarsResponse> getStars();
 
 	@GET("/stars_detailed")
-	Call<Void> getStartsDetailed();
+	Call<StarsDetailedResponse> getStarsDetailed();
 
 	/**
 	 * Request<br>
@@ -65,6 +68,6 @@ public interface PornhubApiService
 	 * @return
 	 */
 	@GET("/search")
-	Call<Void> getSearch(@QueryMap Map<String, String> query);
+	Call<SearchResponse> getSearch(@QueryMap Map<String, String> query);
 
 }

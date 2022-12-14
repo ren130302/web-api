@@ -1,29 +1,58 @@
 package com.ren130302.webapi.lib;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import com.ren130302.webapi.lib.interfaces.IApiRequest;
-import com.ren130302.webapi.lib.interfaces.IApiService;
-import com.ren130302.webapi.lib.interfaces.IBuilder;
-import com.ren130302.webapi.lib.interfaces.IResponse;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.Accessors;
 import retrofit2.Call;
 
-@Value(staticConstructor = "create")
-@Accessors(fluent = true)
-public final class ApiRequest<
-	SERVICE extends IApiService,
-	RESPONSE extends IResponse,
-	BUILDER extends IBuilder>
-	implements IApiRequest<SERVICE, RESPONSE, BUILDER> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ApiRequest {
 
-	private final @NonNull Class<SERVICE> serviceClass;
-	private final @NonNull Supplier<BUILDER> builderSupplier;
-	private final @NonNull Supplier<RESPONSE> responseSupplier;
-	private final @NonNull BiFunction<SERVICE, Map<String, String>, Call<RESPONSE>> urlMethod;
+	public static <
+		SERVICE,
+		RESPONSE> NoParams<SERVICE, RESPONSE> noParams(Class<SERVICE> serviceClass, Function<SERVICE, Call<RESPONSE>> urlMethod) {
+		return NoParams.of(serviceClass, urlMethod);
+	}
+
+	public static <
+		SERVICE,
+		RESPONSE,
+		BUILDER extends ApiBuilder> NeedParams<SERVICE, RESPONSE, BUILDER> needParams(Class<SERVICE> serviceClass, BiFunction<SERVICE, Map<String, String>, Call<RESPONSE>> urlMethod, Optional<BUILDER> builderOptional) {
+		return NeedParams.of(serviceClass, urlMethod, builderOptional);
+	}
+
+	@Value(staticConstructor = "of")
+	@Accessors(fluent = true)
+	private static class NoParams<
+		SERVICE,
+		RESPONSE>
+		implements IApiRequest.NoParams<SERVICE, RESPONSE> {
+
+		private final @NonNull Class<SERVICE> serviceClass;
+		private final @NonNull Function<SERVICE, Call<RESPONSE>> urlMethod;
+
+	}
+
+	@Value(staticConstructor = "of")
+	@Accessors(fluent = true)
+	private static class NeedParams<
+		SERVICE,
+		RESPONSE,
+		BUILDER extends ApiBuilder>
+		implements IApiRequest.NeedParams<SERVICE, RESPONSE, BUILDER> {
+
+		private final @NonNull Class<SERVICE> serviceClass;
+		private final @NonNull BiFunction<SERVICE, Map<String, String>, Call<RESPONSE>> urlMethod;
+		private final @NonNull Optional<BUILDER> builderOptional;
+
+	}
 }

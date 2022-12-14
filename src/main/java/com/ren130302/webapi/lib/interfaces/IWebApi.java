@@ -1,9 +1,10 @@
 package com.ren130302.webapi.lib.interfaces;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.ren130302.utils.Ticks;
@@ -14,10 +15,10 @@ import retrofit2.Retrofit;
 
 public interface IWebApi<
 	CLIENT extends IApiClient,
-	SERVICE extends IApiService,
-	REQUEST extends IApiRequest<SERVICE, RESPONSE, BUILDER>,
-	RESPONSE extends IResponse,
-	BUILDER extends IBuilder> {
+	SERVICE,
+	REQUEST extends IApiRequest<SERVICE>,
+	RESPONSE,
+	BUILDER extends IApiBuilder> {
 
 	Supplier<CLIENT> clientSupplier();
 
@@ -26,17 +27,29 @@ public interface IWebApi<
 	default void executeQuery(Supplier<String> apiKeySupplier, Consumer<BUILDER> paramsConsumer, Supplier<Callback<RESPONSE>> callbackSupplier) {
 		CLIENT client = this.clientSupplier().get();
 		REQUEST request = this.requestSupplier().get();
-		BUILDER builder = request.builder();
-		Retrofit retrofit = RetrofitInstance.singleton(client.retrofitBuilderFunction());
+		Retrofit retrofit = client.retrofit();
 		SERVICE service = retrofit.create(request.serviceClass());
-
+		Map<String, String> queryMap = new HashMap<>();
 		Callback<RESPONSE> callback = callbackSupplier.get();
-		Map<String, String> queryMap = builder.initQuery(paramsConsumer);
 
-		System.out.print(this.print(retrofit, client, queryMap));
+		Optional<BUILDER> builderOptional = request.builderOptional();
+		if (request instanceof IApiRequest.NoParams<SERVICE, RESPONSE>) {
+
+		}
+		else if (request instanceof IApiRequest.NeedParams<SERVICE, RESPONSE, BUILDER> t1) {
+
+		}
+		if (builderOptional.isPresent()) {
+			BUILDER builder = builderOptional.get();
+			queryMap.putAll(builder.initQuery(paramsConsumer));
+			System.out.print(this.print(retrofit, client, queryMap));
+
+		}
+
 		if (Objects.nonNull(client.apiLabel())) {
 			queryMap.put(client.apiLabel(), apiKeySupplier.get());
 		}
+
 		Call<RESPONSE> call = request.urlMethod().apply(service, queryMap);
 		call.enqueue(callback);
 
@@ -53,21 +66,5 @@ public interface IWebApi<
 		queryMap.forEach((k, v) -> buf.append(String.format("%s : %s \n", k, v)));
 
 		return buf.toString();
-	}
-
-	public static class RetrofitInstance {
-		private static Retrofit mRetrofit;
-
-		private static Retrofit singleton(Function<Retrofit.Builder, Retrofit.Builder> builderFunction) {
-			if (mRetrofit == null) {
-				mRetrofit = build(builderFunction);
-			}
-
-			return mRetrofit;
-		}
-
-		private static Retrofit build(Function<Retrofit.Builder, Retrofit.Builder> builderFunction) {
-			return builderFunction.apply(new Retrofit.Builder()).build();
-		}
 	}
 }
