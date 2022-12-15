@@ -2,6 +2,7 @@ package com.ren130302.webapi.pornhubapi;
 
 import java.util.Map;
 
+import com.ren130302.webapi.lib.interfaces.IApiService;
 import com.ren130302.webapi.pornhubapi.response.CategoriesResponse;
 import com.ren130302.webapi.pornhubapi.response.SearchResponse;
 import com.ren130302.webapi.pornhubapi.response.StarsDetailedResponse;
@@ -13,7 +14,8 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 
-public interface PornhubApiService {
+public interface PornhubApiService
+	extends IApiService {
 	/**
 	 *
 	 * :param id: id of requested video <br>

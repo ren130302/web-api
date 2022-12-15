@@ -5,7 +5,7 @@ import com.ren130302.webapi.lib.ApiBuilder;
 public final class Search {
 
 	public static class Builder
-		extends ApiBuilder {
+		extends ApiBuilder<Builder> {
 
 		public Builder q(String q) {
 			this.put("search", q);

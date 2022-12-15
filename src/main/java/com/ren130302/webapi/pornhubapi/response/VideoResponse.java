@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import lombok.Data;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
 		"duration",
@@ -29,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 		"is_active"
 })
 @Generated("jsonschema2pojo")
+@Data
 public class VideoResponse {
 
 	@JsonProperty("duration")
@@ -69,7 +72,8 @@ public class VideoResponse {
 			"tag_name"
 	})
 	@Generated("jsonschema2pojo")
-	public class Tag {
+	@Data
+	public static class Tag {
 
 		@JsonProperty("tag_name")
 		public String tagName;
@@ -81,7 +85,8 @@ public class VideoResponse {
 			"tag_name"
 	})
 	@Generated("jsonschema2pojo")
-	public class Category {
+	@Data
+	public static class Category {
 
 		@JsonProperty("category_name")
 		public String categoryName;
@@ -96,7 +101,8 @@ public class VideoResponse {
 			"src"
 	})
 	@Generated("jsonschema2pojo")
-	public class Thumb {
+	@Data
+	public static class Thumb {
 
 		@JsonProperty("size")
 		public String size;

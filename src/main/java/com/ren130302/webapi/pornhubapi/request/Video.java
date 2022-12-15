@@ -5,7 +5,7 @@ import com.ren130302.webapi.lib.ApiBuilder;
 public final class Video {
 
 	public static class Builder
-		extends ApiBuilder {
+		extends ApiBuilder<Builder> {
 
 		public static Builder of(String id) {
 			return new Builder().id(id);

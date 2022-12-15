@@ -2,145 +2,48 @@ package com.ren130302.webapi.lib.interfaces;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public interface IWebApi<
-	APIKEY extends IApiKey,
-	QUERY extends IQueryMap,
-	CLIENT extends IApiClient<APIKEY>,
-	REQUEST extends IApiRequest<SERVICE>,
+	CLIENT extends IApiClient,
+	REQUEST extends IApiRequest<SERVICE, RESPONSE, BUILDER>,
 	SERVICE extends IApiService,
-	RESPONSE> {
+	RESPONSE,
+	BUILDER extends IApiBuilder<BUILDER>> {
 
-	Supplier<CLIENT> clientSupplier();
+	CLIENT client();
 
-	Supplier<REQUEST> requestSupplier();
+	REQUEST request();
 
-	Retrofit retrofit();
-
-	SERVICE service();
-
-	Call<RESPONSE> call();
-
-	Supplier<QUERY> querySupplier();
-
-	public interface NN<
-		APIKEY extends IApiKey.No,
-		QUERY extends IQueryMap.No<SERVICE, RESPONSE>,
-		CLIENT extends IApiClient<APIKEY>,
-		REQUEST extends IApiRequest.NoBuilder<SERVICE>,
-		SERVICE extends IApiService,
-		RESPONSE>
-		extends IWebApi<APIKEY, QUERY, CLIENT, REQUEST, SERVICE, RESPONSE> {
-
-		default void executeQuery(Callback<RESPONSE> callback) {
-			CLIENT client = this.clientSupplier().get();
-			REQUEST request = this.requestSupplier().get();
-			QUERY query = this.querySupplier().get();
-
-			Retrofit retrofit = client.retrofit();
-			SERVICE service = request.service(retrofit);
-			Call<RESPONSE> call = query.urlMethod().apply(service);
-
-			call.enqueue(callback);
-		}
+	default void executeQuery(Callback<RESPONSE> callback) {
+		this.executeQuery(null, null, callback);
 	}
 
-	public interface RN<
-		APIKEY extends IApiKey.Require<QUERY>,
-		QUERY extends IQueryMap.Require<SERVICE, RESPONSE>,
-		CLIENT extends IApiClient<APIKEY>,
-		REQUEST extends IApiRequest.NoBuilder<SERVICE>,
-		SERVICE extends IApiService,
-		RESPONSE>
-		extends IWebApi<APIKEY, QUERY, CLIENT, REQUEST, SERVICE, RESPONSE> {
-
-		default void executeQuery(Callback<RESPONSE> callback) {
-			CLIENT client = this.clientSupplier().get();
-			REQUEST request = this.requestSupplier().get();
-			APIKEY apiKey = client.apiKeySupplier().get();
-			QUERY query = this.querySupplier().get();
-
-			Retrofit retrofit = client.retrofit();
-			SERVICE service = request.service(retrofit);
-
-			Map<String, String> queryMap = query.queryMap();
-			apiKey.putApi(query);
-
-			Call<RESPONSE> call = query.urlMethod().apply(service, queryMap);
-
-			call.enqueue(callback);
-		}
+	default void executeQuery(Consumer<BUILDER> builderConsumer, Callback<RESPONSE> callback) {
+		this.executeQuery(null, builderConsumer, callback);
 	}
 
-	public interface NR<
-		APIKEY extends IApiKey.No,
-		QUERY extends IQueryMap.Require<SERVICE, RESPONSE>,
-		CLIENT extends IApiClient<APIKEY>,
-		REQUEST extends IApiRequest.RequireBuilder<SERVICE, BUILDER>,
-		SERVICE extends IApiService,
-		RESPONSE,
-		BUILDER extends IApiBuilder<BUILDER>>
-		extends IWebApi<APIKEY, QUERY, CLIENT, REQUEST, SERVICE, RESPONSE> {
-
-		default void executeQuery(Consumer<BUILDER> builderConsumer, Callback<RESPONSE> callback) {
-			CLIENT client = this.clientSupplier().get();
-			REQUEST request = this.requestSupplier().get();
-			QUERY query = this.querySupplier().get();
-
-			Retrofit retrofit = client.retrofit();
-			SERVICE service = request.service(retrofit);
-			BUILDER builder = request.builder();
-
-			// initialize queryMap
-			Map<String, String> queryMap = query.queryMap();
-
-			builder.initQueryMap(builderConsumer);
-
-			// ready to call service
-			Call<RESPONSE> call = query.urlMethod().apply(service, queryMap);
-
-			// call service
-			call.enqueue(callback);
-		}
+	default void executeQuery(String apiKey, Callback<RESPONSE> callback) {
+		this.executeQuery(apiKey, null, callback);
 	}
 
-	public interface RR<
-		APIKEY extends IApiKey.Require<QUERY>,
-		QUERY extends IQueryMap.Require<SERVICE, RESPONSE>,
-		CLIENT extends IApiClient<APIKEY>,
-		REQUEST extends IApiRequest.RequireBuilder<SERVICE, BUILDER>,
-		SERVICE extends IApiService,
-		RESPONSE,
-		BUILDER extends IApiBuilder<BUILDER>>
-		extends IWebApi<APIKEY, QUERY, CLIENT, REQUEST, SERVICE, RESPONSE> {
+	default void executeQuery(String apiKey, Consumer<BUILDER> builderConsumer, Callback<RESPONSE> callback) {
+		CLIENT client = this.client();
+		REQUEST request = this.request();
 
-		BUILDER builder();
+		Retrofit retrofit = client.retrofit();
+		SERVICE service = request.service(retrofit);
 
-		default void executeQuery(Consumer<BUILDER> builderConsumer, Callback<RESPONSE> callback) {
-			CLIENT client = this.clientSupplier().get();
-			REQUEST request = this.requestSupplier().get();
-			APIKEY apiKey = client.apiKeySupplier().get();
-			QUERY query = this.querySupplier().get();
+		// initialize queryMap
+		Map<String, String> queryMap = request.queryMap();
+		client.apiLabelOptional().ifPresent(apiLabel -> queryMap.put(apiLabel, apiKey));
+		request.builderOptional().ifPresent(builder -> queryMap.putAll(builder.initQueryMap(builderConsumer)));
 
-			Retrofit retrofit = client.retrofit();
-			SERVICE service = request.service(retrofit);
-			BUILDER builder = request.builder();
-
-			// initialize queryMap
-			Map<String, String> queryMap = query.queryMap();
-			apiKey.putApi(query);
-			builder.initQueryMap(builderConsumer);
-
-			// ready to call service
-			Call<RESPONSE> call = query.urlMethod().apply(service, queryMap);
-
-			// call service
-			call.enqueue(callback);
-		}
+		// ready to call service
+		Call<RESPONSE> call = request.urlMethod().apply(service, queryMap);
+		call.enqueue(callback);
 	}
 }
