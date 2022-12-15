@@ -5,38 +5,34 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public interface IApiBuilder {
+public interface IApiBuilder<
+	BUILDER extends IApiBuilder<BUILDER>> {
 
 	Map<String, String> queryMap();
 
 	@SuppressWarnings("unchecked")
-	default <
-		BUILDER extends IApiBuilder> BUILDER put(String key, String value) {
+	default BUILDER put(String key, String value) {
 		this.queryMap().put(key, value);
 		return (BUILDER) this;
 	}
 
 	@SuppressWarnings("unchecked")
-	default <
-		BUILDER extends IApiBuilder> BUILDER remove(Predicate<? super String> filter) {
+	default BUILDER remove(Predicate<? super String> filter) {
 		this.queryMap().values().removeIf(filter);
 		return (BUILDER) this;
 	}
 
 	@SuppressWarnings("unchecked")
-	default <
-		BUILDER extends IApiBuilder> BUILDER putItems(Consumer<BUILDER> consumer) {
-		consumer.accept((BUILDER) this);
+	default BUILDER putItems(Consumer<BUILDER> builderConsumer) {
+		builderConsumer.accept((BUILDER) this);
 		return (BUILDER) this;
 	}
 
-	default <
-		BUILDER extends IApiBuilder> BUILDER removeItems() {
+	default BUILDER removeItems() {
 		return this.remove(String::isEmpty).remove(String::isBlank).remove(Objects::isNull);
 	}
 
-	default <
-		BUILDER extends IApiBuilder> Map<String, String> initQuery(Consumer<BUILDER> consumer) {
-		return this.putItems(consumer).removeItems().queryMap();
+	default Map<String, String> initQueryMap(Consumer<BUILDER> builderConsumee) {
+		return this.putItems(builderConsumee).removeItems().queryMap();
 	}
 }

@@ -1,70 +1,146 @@
 package com.ren130302.webapi.lib.interfaces;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import com.ren130302.utils.Ticks;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public interface IWebApi<
-	CLIENT extends IApiClient,
-	SERVICE,
+	APIKEY extends IApiKey,
+	QUERY extends IQueryMap,
+	CLIENT extends IApiClient<APIKEY>,
 	REQUEST extends IApiRequest<SERVICE>,
-	RESPONSE,
-	BUILDER extends IApiBuilder> {
+	SERVICE extends IApiService,
+	RESPONSE> {
 
 	Supplier<CLIENT> clientSupplier();
 
 	Supplier<REQUEST> requestSupplier();
 
-	default void executeQuery(Supplier<String> apiKeySupplier, Consumer<BUILDER> paramsConsumer, Supplier<Callback<RESPONSE>> callbackSupplier) {
-		CLIENT client = this.clientSupplier().get();
-		REQUEST request = this.requestSupplier().get();
-		Retrofit retrofit = client.retrofit();
-		SERVICE service = retrofit.create(request.serviceClass());
-		Map<String, String> queryMap = new HashMap<>();
-		Callback<RESPONSE> callback = callbackSupplier.get();
+	Retrofit retrofit();
 
-		Optional<BUILDER> builderOptional = request.builderOptional();
-		if (request instanceof IApiRequest.NoParams<SERVICE, RESPONSE>) {
+	SERVICE service();
 
+	Call<RESPONSE> call();
+
+	Supplier<QUERY> querySupplier();
+
+	public interface NN<
+		APIKEY extends IApiKey.No,
+		QUERY extends IQueryMap.No<SERVICE, RESPONSE>,
+		CLIENT extends IApiClient<APIKEY>,
+		REQUEST extends IApiRequest.NoBuilder<SERVICE>,
+		SERVICE extends IApiService,
+		RESPONSE>
+		extends IWebApi<APIKEY, QUERY, CLIENT, REQUEST, SERVICE, RESPONSE> {
+
+		default void executeQuery(Callback<RESPONSE> callback) {
+			CLIENT client = this.clientSupplier().get();
+			REQUEST request = this.requestSupplier().get();
+			QUERY query = this.querySupplier().get();
+
+			Retrofit retrofit = client.retrofit();
+			SERVICE service = request.service(retrofit);
+			Call<RESPONSE> call = query.urlMethod().apply(service);
+
+			call.enqueue(callback);
 		}
-		else if (request instanceof IApiRequest.NeedParams<SERVICE, RESPONSE, BUILDER> t1) {
-
-		}
-		if (builderOptional.isPresent()) {
-			BUILDER builder = builderOptional.get();
-			queryMap.putAll(builder.initQuery(paramsConsumer));
-			System.out.print(this.print(retrofit, client, queryMap));
-
-		}
-
-		if (Objects.nonNull(client.apiLabel())) {
-			queryMap.put(client.apiLabel(), apiKeySupplier.get());
-		}
-
-		Call<RESPONSE> call = request.urlMethod().apply(service, queryMap);
-		call.enqueue(callback);
-
-		Ticks.tick(100L, call, c -> call.timeout().hasDeadline(), c -> {
-			System.out.println("wait for seconds...");
-		});
 	}
 
-	default String print(Retrofit retrofit, CLIENT client, Map<String, String> queryMap) {
-		StringBuffer buf = new StringBuffer();
+	public interface RN<
+		APIKEY extends IApiKey.Require<QUERY>,
+		QUERY extends IQueryMap.Require<SERVICE, RESPONSE>,
+		CLIENT extends IApiClient<APIKEY>,
+		REQUEST extends IApiRequest.NoBuilder<SERVICE>,
+		SERVICE extends IApiService,
+		RESPONSE>
+		extends IWebApi<APIKEY, QUERY, CLIENT, REQUEST, SERVICE, RESPONSE> {
 
-		buf.append(String.format("baseUrl : %s \n", retrofit.baseUrl()));
-		buf.append(String.format("%s : %s \n", client.apiLabel(), "***"));
-		queryMap.forEach((k, v) -> buf.append(String.format("%s : %s \n", k, v)));
+		default void executeQuery(Callback<RESPONSE> callback) {
+			CLIENT client = this.clientSupplier().get();
+			REQUEST request = this.requestSupplier().get();
+			APIKEY apiKey = client.apiKeySupplier().get();
+			QUERY query = this.querySupplier().get();
 
-		return buf.toString();
+			Retrofit retrofit = client.retrofit();
+			SERVICE service = request.service(retrofit);
+
+			Map<String, String> queryMap = query.queryMap();
+			apiKey.putApi(query);
+
+			Call<RESPONSE> call = query.urlMethod().apply(service, queryMap);
+
+			call.enqueue(callback);
+		}
+	}
+
+	public interface NR<
+		APIKEY extends IApiKey.No,
+		QUERY extends IQueryMap.Require<SERVICE, RESPONSE>,
+		CLIENT extends IApiClient<APIKEY>,
+		REQUEST extends IApiRequest.RequireBuilder<SERVICE, BUILDER>,
+		SERVICE extends IApiService,
+		RESPONSE,
+		BUILDER extends IApiBuilder<BUILDER>>
+		extends IWebApi<APIKEY, QUERY, CLIENT, REQUEST, SERVICE, RESPONSE> {
+
+		default void executeQuery(Consumer<BUILDER> builderConsumer, Callback<RESPONSE> callback) {
+			CLIENT client = this.clientSupplier().get();
+			REQUEST request = this.requestSupplier().get();
+			QUERY query = this.querySupplier().get();
+
+			Retrofit retrofit = client.retrofit();
+			SERVICE service = request.service(retrofit);
+			BUILDER builder = request.builder();
+
+			// initialize queryMap
+			Map<String, String> queryMap = query.queryMap();
+
+			builder.initQueryMap(builderConsumer);
+
+			// ready to call service
+			Call<RESPONSE> call = query.urlMethod().apply(service, queryMap);
+
+			// call service
+			call.enqueue(callback);
+		}
+	}
+
+	public interface RR<
+		APIKEY extends IApiKey.Require<QUERY>,
+		QUERY extends IQueryMap.Require<SERVICE, RESPONSE>,
+		CLIENT extends IApiClient<APIKEY>,
+		REQUEST extends IApiRequest.RequireBuilder<SERVICE, BUILDER>,
+		SERVICE extends IApiService,
+		RESPONSE,
+		BUILDER extends IApiBuilder<BUILDER>>
+		extends IWebApi<APIKEY, QUERY, CLIENT, REQUEST, SERVICE, RESPONSE> {
+
+		BUILDER builder();
+
+		default void executeQuery(Consumer<BUILDER> builderConsumer, Callback<RESPONSE> callback) {
+			CLIENT client = this.clientSupplier().get();
+			REQUEST request = this.requestSupplier().get();
+			APIKEY apiKey = client.apiKeySupplier().get();
+			QUERY query = this.querySupplier().get();
+
+			Retrofit retrofit = client.retrofit();
+			SERVICE service = request.service(retrofit);
+			BUILDER builder = request.builder();
+
+			// initialize queryMap
+			Map<String, String> queryMap = query.queryMap();
+			apiKey.putApi(query);
+			builder.initQueryMap(builderConsumer);
+
+			// ready to call service
+			Call<RESPONSE> call = query.urlMethod().apply(service, queryMap);
+
+			// call service
+			call.enqueue(callback);
+		}
 	}
 }

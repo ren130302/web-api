@@ -14,7 +14,7 @@ import lombok.Data;
 public final class Sources {
 
 	public static class Builder
-		extends ApiBuilder {
+		extends ApiBuilder<Builder> {
 
 		/**
 		 * Find sources that display news of this category. <br>

@@ -14,7 +14,7 @@ import lombok.Data;
 public final class TopHeadlines {
 
 	public static class Builder
-		extends ApiBuilder {
+		extends ApiBuilder<Builder> {
 
 		/**
 		 * Keywords or phrases to search for in the article title and body.<br>

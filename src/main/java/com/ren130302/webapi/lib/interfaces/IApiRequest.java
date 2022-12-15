@@ -1,33 +1,27 @@
 package com.ren130302.webapi.lib.interfaces;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import retrofit2.Call;
+import retrofit2.Retrofit;
 
 public interface IApiRequest<
 	SERVICE> {
 
 	Class<SERVICE> serviceClass();
 
-	public interface NoParams<
-		SERVICE,
-		RESPONSE>
-		extends IApiRequest<SERVICE> {
-
-		Function<SERVICE, Call<RESPONSE>> urlMethod();
+	default SERVICE service(Retrofit retrofit) {
+		return retrofit.create(this.serviceClass());
 	}
 
-	public interface NeedParams<
-		SERVICE,
-		RESPONSE,
-		BUILDER extends IApiBuilder>
+	public interface NoBuilder<
+		SERVICE extends IApiService>
 		extends IApiRequest<SERVICE> {
 
-		BiFunction<SERVICE, Map<String, String>, Call<RESPONSE>> urlMethod();
+	}
 
-		Optional<BUILDER> builderOptional();
+	public interface RequireBuilder<
+		SERVICE extends IApiService,
+		BUILDER extends IApiBuilder<BUILDER>>
+		extends IApiRequest<SERVICE> {
+
+		BUILDER builder();
 	}
 }

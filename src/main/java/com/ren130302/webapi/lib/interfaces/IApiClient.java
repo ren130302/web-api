@@ -1,26 +1,18 @@
 package com.ren130302.webapi.lib.interfaces;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import lombok.NonNull;
 import retrofit2.Retrofit;
 
-public interface IApiClient {
+public interface IApiClient<
+	APIKEY extends IApiKey> {
 
 	@NonNull
 	Function<Retrofit.Builder, Retrofit.Builder> retrofitBuilderFunction();
 
-	public interface NoApiKey
-		extends IApiClient {
-
-	}
-
-	public interface NeedApiKey
-		extends IApiClient {
-		String apiLabel();
-
-		String apiKey();
-	}
+	Supplier<APIKEY> apiKeySupplier();
 
 	default Retrofit retrofit() {
 		return RetrofitInstance.singleton(this.retrofitBuilderFunction());

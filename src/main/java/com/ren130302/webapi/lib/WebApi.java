@@ -1,38 +1,56 @@
 package com.ren130302.webapi.lib;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import com.ren130302.webapi.lib.ApiClient.NoApiKey;
+import com.ren130302.webapi.lib.ApiRequest.NoBuilder;
+import com.ren130302.webapi.lib.interfaces.IApiClient;
+import com.ren130302.webapi.lib.interfaces.IApiKey;
 import com.ren130302.webapi.lib.interfaces.IApiRequest;
+import com.ren130302.webapi.lib.interfaces.IApiService;
+import com.ren130302.webapi.lib.interfaces.IQueryMap;
 import com.ren130302.webapi.lib.interfaces.IWebApi;
 
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Value;
 import lombok.experimental.Accessors;
-import retrofit2.Callback;
+import retrofit2.Call;
+import retrofit2.Retrofit;
 
-@Value(staticConstructor = "set")
+@Data
 @Accessors(fluent = true)
-public final class WebApi<
-	SERVICE,
-	RESPONSE,
-	BUILDER extends ApiBuilder>
-	implements
-	IWebApi<ApiClient, SERVICE, ApiRequest<SERVICE, RESPONSE, BUILDER>, RESPONSE, BUILDER> {
+public class WebApi<
+	APIKEY extends IApiKey,
+	QUERY extends IQueryMap,
+	CLIENT extends IApiClient<APIKEY>,
+	REQUEST extends IApiRequest<SERVICE>,
+	SERVICE extends IApiService,
+	RESPONSE>
+	implements IWebApi<APIKEY, QUERY, CLIENT, REQUEST, SERVICE, RESPONSE> {
 
-	private final @NonNull Supplier<ApiClient> clientSupplier;
-	private final @NonNull Supplier<IApiRequest<SERVICE, RESPONSE, BUILDER>> requestSupplier;
+	private final @NonNull Supplier<CLIENT> clientSupplier;
+	private final @NonNull Supplier<REQUEST> requestSupplier;
+	private final @NonNull Supplier<QUERY> querySupplier;
+	private Retrofit retrofit;
+	private SERVICE service;
+	private Call<RESPONSE> call;
 
-	private WebApi(Supplier<ApiClient> clientSupplier,
-			Supplier<ApiRequest<SERVICE, RESPONSE, BUILDER>> requestSupplier) {
-		this.clientSupplier = clientSupplier;
-		this.requestSupplier = requestSupplier;
-	}
-
-	public static <
+	public static class NN<
 		SERVICE,
-		RESPONSE,
-		BUILDER extends ApiBuilder> void executeQuery(Supplier<WebApi<SERVICE, RESPONSE, BUILDER>> function, Supplier<String> apiKeySupplier, Consumer<BUILDER> paramsConsumer, Supplier<Callback<RESPONSE>> callbackSupplier) {
-		function.get().executeQuery(apiKeySupplier, paramsConsumer, callbackSupplier);
+		RESPONSE>
+		extends WebApi<ApiKey.<SERVICE, RESPONSE>, NoBuilder<SERVICE, RESPONSE>, SERVICE, RESPONSE>
+		implements IWebApi.NN<NoApiKey<SERVICE, RESPONSE>, NoBuilder<SERVICE, RESPONSE>, SERVICE, RESPONSE> {
+
+		private NN(@NonNull Supplier<NoApiKey<SERVICE, RESPONSE>> clientSupplier,
+				@NonNull Supplier<NoBuilder<SERVICE, RESPONSE>> requestSupplier) {
+			super(clientSupplier, requestSupplier);
+		}
+
+		public static <
+			SERVICE,
+			RESPONSE> WebApi.NN<SERVICE, RESPONSE> of(Supplier<NoApiKey<SERVICE, RESPONSE>> clientSupplier, Supplier<NoBuilder<SERVICE, RESPONSE>> requestSupplier) {
+			return new WebApi.NN<>(clientSupplier, requestSupplier);
+		}
+
 	}
 }

@@ -1,58 +1,49 @@
 package com.ren130302.webapi.lib;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import com.ren130302.webapi.lib.interfaces.IApiRequest;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.Accessors;
-import retrofit2.Call;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ApiRequest {
 
 	public static <
 		SERVICE,
-		RESPONSE> NoParams<SERVICE, RESPONSE> noParams(Class<SERVICE> serviceClass, Function<SERVICE, Call<RESPONSE>> urlMethod) {
-		return NoParams.of(serviceClass, urlMethod);
+		RESPONSE> NoBuilder<SERVICE, RESPONSE> noParams(Class<SERVICE> serviceClass) {
+		return NoBuilder.of(serviceClass);
 	}
 
 	public static <
 		SERVICE,
 		RESPONSE,
-		BUILDER extends ApiBuilder> NeedParams<SERVICE, RESPONSE, BUILDER> needParams(Class<SERVICE> serviceClass, BiFunction<SERVICE, Map<String, String>, Call<RESPONSE>> urlMethod, Optional<BUILDER> builderOptional) {
-		return NeedParams.of(serviceClass, urlMethod, builderOptional);
+		BUILDER extends ApiBuilder> RequireBuilder<SERVICE, RESPONSE, BUILDER> needParams(Class<SERVICE> serviceClass, Optional<BUILDER> builderOptional) {
+		return RequireBuilder.of(serviceClass, builderOptional);
 	}
 
 	@Value(staticConstructor = "of")
 	@Accessors(fluent = true)
-	private static class NoParams<
+	public static class NoBuilder<
 		SERVICE,
 		RESPONSE>
-		implements IApiRequest.NoParams<SERVICE, RESPONSE> {
+		implements IApiRequest.NoBuilder<SERVICE,> {
 
 		private final @NonNull Class<SERVICE> serviceClass;
-		private final @NonNull Function<SERVICE, Call<RESPONSE>> urlMethod;
 
 	}
 
 	@Value(staticConstructor = "of")
 	@Accessors(fluent = true)
-	private static class NeedParams<
+	public static class RequireBuilder<
 		SERVICE,
 		RESPONSE,
 		BUILDER extends ApiBuilder>
-		implements IApiRequest.NeedParams<SERVICE, RESPONSE, BUILDER> {
+		implements IApiRequest.RequireBuilder<SERVICE, RESPONSE, BUILDER> {
 
 		private final @NonNull Class<SERVICE> serviceClass;
-		private final @NonNull BiFunction<SERVICE, Map<String, String>, Call<RESPONSE>> urlMethod;
-		private final @NonNull Optional<BUILDER> builderOptional;
+		private final @NonNull BUILDER builder;
 
 	}
 }

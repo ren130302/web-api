@@ -5,13 +5,14 @@ import java.util.Map;
 
 import com.ren130302.webapi.lib.interfaces.IApiBuilder;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.experimental.Accessors;
 
-public class ApiBuilder
-	implements IApiBuilder {
+@Data
+@Accessors(fluent = true)
+public class ApiBuilder<
+	BUILDER extends IApiBuilder<BUILDER>>
+	implements IApiBuilder<BUILDER> {
 
-	@Getter
-	@Accessors(fluent = true)
 	private final Map<String, String> queryMap = new HashMap<>();
 }
