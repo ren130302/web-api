@@ -12,7 +12,7 @@ public interface IWebApi<
 	REQUEST extends IApiRequest<SERVICE, RESPONSE, BUILDER>,
 	SERVICE extends IApiService,
 	RESPONSE,
-	BUILDER extends IApiBuilder<BUILDER>> {
+	BUILDER extends IApiBuilder> {
 
 	CLIENT client();
 

@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 public class WebApi<
 	SERVICE extends IApiService,
 	RESPONSE,
-	BUILDER extends ApiBuilder<BUILDER>>
+	BUILDER extends ApiBuilder>
 	implements
 	IWebApi<ApiClient, ApiRequest<SERVICE, RESPONSE, BUILDER>, SERVICE, RESPONSE, BUILDER> {
 

@@ -10,9 +10,8 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(fluent = true)
-public class ApiBuilder<
-	BUILDER extends IApiBuilder<BUILDER>>
-	implements IApiBuilder<BUILDER> {
+public class ApiBuilder
+	implements IApiBuilder {
 
 	private final Map<String, String> queryMap = new HashMap<>();
 }

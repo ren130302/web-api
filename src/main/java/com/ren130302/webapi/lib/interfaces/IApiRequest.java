@@ -10,7 +10,7 @@ import retrofit2.Retrofit;
 public interface IApiRequest<
 	SERVICE extends IApiService,
 	RESPONSE,
-	BUILDER extends IApiBuilder<BUILDER>> {
+	BUILDER extends IApiBuilder> {
 
 	Class<SERVICE> serviceClass();
 

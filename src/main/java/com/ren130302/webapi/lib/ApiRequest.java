@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.ren130302.webapi.lib.interfaces.IApiBuilder;
 import com.ren130302.webapi.lib.interfaces.IApiRequest;
 import com.ren130302.webapi.lib.interfaces.IApiService;
 
@@ -20,7 +19,7 @@ import retrofit2.Call;
 public class ApiRequest<
 	SERVICE extends IApiService,
 	RESPONSE,
-	BUILDER extends IApiBuilder<BUILDER>>
+	BUILDER extends ApiBuilder>
 	implements IApiRequest<SERVICE, RESPONSE, BUILDER> {
 
 	private final @NonNull Class<SERVICE> serviceClass;
@@ -32,14 +31,14 @@ public class ApiRequest<
 	public static <
 		SERVICE extends IApiService,
 		RESPONSE,
-		BUILDER extends IApiBuilder<BUILDER>> ApiRequest<SERVICE, RESPONSE, BUILDER> of(@NonNull Class<SERVICE> serviceClass, @NonNull BiFunction<SERVICE, Map<String, String>, Call<RESPONSE>> urlMethod, BUILDER builder) {
+		BUILDER extends ApiBuilder> ApiRequest<SERVICE, RESPONSE, BUILDER> of(@NonNull Class<SERVICE> serviceClass, @NonNull BiFunction<SERVICE, Map<String, String>, Call<RESPONSE>> urlMethod, BUILDER builder) {
 		return of(serviceClass, urlMethod, Optional.ofNullable(builder));
 	}
 
 	public static <
 		SERVICE extends IApiService,
 		RESPONSE,
-		BUILDER extends IApiBuilder<BUILDER>> ApiRequest<SERVICE, RESPONSE, BUILDER> of(@NonNull Class<SERVICE> serviceClass, @NonNull Function<SERVICE, Call<RESPONSE>> urlMethod) {
+		BUILDER extends ApiBuilder> ApiRequest<SERVICE, RESPONSE, BUILDER> of(@NonNull Class<SERVICE> serviceClass, @NonNull Function<SERVICE, Call<RESPONSE>> urlMethod) {
 		return of(serviceClass, (s, q) -> urlMethod.apply(s), Optional.empty());
 	}
 }

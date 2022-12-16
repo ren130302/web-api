@@ -15,7 +15,7 @@ import lombok.Data;
 public final class Everything {
 
 	public static class Builder
-		extends ApiBuilder<Builder> {
+		extends ApiBuilder {
 
 		/**
 		 * Keywords or phrases to search for in the article title and body.<br>

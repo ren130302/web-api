@@ -1,5 +1,7 @@
+
 package com.ren130302.webapi.pornhubapi.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.processing.Generated;
@@ -18,19 +20,32 @@ import lombok.Data;
 @Data
 public class StarsResponse {
 
-	@JsonProperty("star_name")
-	public List<Star> stars;
+	@JsonProperty("stars")
+	private List<Star> stars = new ArrayList<>();
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonPropertyOrder({
-			"stars"
+			"star"
 	})
 	@Generated("jsonschema2pojo")
 	@Data
 	public static class Star {
 
-		@JsonProperty("star_name")
-		public String starName;
+		@JsonProperty("star")
+		private Star__1 star;
+
+		@JsonInclude(JsonInclude.Include.NON_NULL)
+		@JsonPropertyOrder({
+				"star_name"
+		})
+		@Generated("jsonschema2pojo")
+		@Data
+		public static class Star__1 {
+
+			@JsonProperty("star_name")
+			private String starName;
+
+		}
 
 	}
 }

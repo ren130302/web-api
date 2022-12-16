@@ -26,7 +26,7 @@ public interface PornhubApiService
 	 * @param query
 	 * @returnVideo
 	 */
-	@GET("/video_by_id")
+	@GET("/webmasters/video_by_id")
 	Call<VideoResponse> getVideoById(@QueryMap Map<String, String> query);
 
 	/**
@@ -35,19 +35,19 @@ public interface PornhubApiService
 	 * @param query
 	 * @return
 	 */
-	@GET("/is_video_active")
+	@GET("/webmasters/is_video_active")
 	Call<VideoResponse> isVideoActive(@QueryMap Map<String, String> query);
 
-	@GET("/categories")
+	@GET("/webmasters/categories")
 	Call<CategoriesResponse> getCategories();
 
-	@GET("/tags")
+	@GET("/webmasters/tags")
 	Call<TagsResponse> getTags();
 
-	@GET("/stars")
+	@GET("/webmasters/stars")
 	Call<StarsResponse> getStars();
 
-	@GET("/stars_detailed")
+	@GET("/webmasters/stars_detailed")
 	Call<StarsDetailedResponse> getStarsDetailed();
 
 	/**
@@ -69,7 +69,7 @@ public interface PornhubApiService
 	 * @param query
 	 * @return
 	 */
-	@GET("/search")
+	@GET("/webmasters/search")
 	Call<SearchResponse> getSearch(@QueryMap Map<String, String> query);
 
 }

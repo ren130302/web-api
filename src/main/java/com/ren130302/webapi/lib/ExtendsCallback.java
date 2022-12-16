@@ -30,6 +30,7 @@ public class ExtendsCallback {
 		return new Callback<>() {
 			@Override
 			public void onResponse(Call<RESPONSE> call, Response<RESPONSE> response) {
+				System.out.println("RequestUrl:" + response.raw().request().url().toString());
 				final RESPONSE responseBody = response.code() == HttpURLConnection.HTTP_OK ? response.body() : null;
 
 				if (Objects.nonNull(responseBody)) {

@@ -1,9 +1,5 @@
 package com.ren130302.webapi.newsapi;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import com.ren130302.webapi.lib.ApiBuilder;
 import com.ren130302.webapi.lib.ApiClient;
 import com.ren130302.webapi.lib.ApiRequest;
 import com.ren130302.webapi.lib.ExtendsCallback;
@@ -16,7 +12,7 @@ import com.ren130302.webapi.newsapi.request.TopHeadlines;
 import com.ren130302.webapi.newsapi.response.Article;
 import com.ren130302.webapi.newsapi.response.Source;
 
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class NewsApiClient {
 
@@ -29,41 +25,20 @@ public class NewsApiClient {
 	private static final String API_KEY = "bb9f2ecdbb9a4882b51cf5a4b98b86a6";
 
 	public static ApiClient set() {
-		return ApiClient.set(API_LABEL, b -> b.baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()));
+		return ApiClient.set(API_LABEL, b -> b.baseUrl(BASE_URL).addConverterFactory(JacksonConverterFactory.create()));
 	}
 
 	public static void main(String[] args) {
-		NewsApiClient.EVERYTHING.executeQuery(
-				API_KEY, 
-				b -> b.q("trump"),  
-				ExtendsCallback.onSuccess(
-						(c, r) -> {
-							Article article = r.getArticles().get(0);
-							System.out.println(article.toString());
-						}, 
-						(c, t) -> System.out.println(t.getMessage())
-						)
-				);
+		NewsApiClient.EVERYTHING.executeQuery(API_KEY, b -> b.q("trump"), ExtendsCallback.onSuccess((c, r) -> {
+			Article article = r.getArticles().get(0);
+			System.out.println(article.toString());
+		}, (c, t) -> System.out.println(t.getMessage())));
 
-		NewsApiClient.TOP_HEADLINES.executeQuery(
-				API_KEY, 
-				b -> b.q("world"), 
-				ExtendsCallback.onSuccess(
-						(c, r) -> {
-							Article article = r.getArticles().get(0);
-							System.out.println(article.toString());
-						}, 
-						(c, t) -> System.out.println(t.getMessage())
-						)
-				);
+		NewsApiClient.TOP_HEADLINES.executeQuery(API_KEY, b -> b.q("world"), ExtendsCallback.onSuccess((c, r) -> {
+			Article article = r.getArticles().get(0);
+			System.out.println(article.toString());
+		}, (c, t) -> System.out.println(t.getMessage())));
 
-		NewsApiClient.SOURCES.executeQuery(
-				API_KEY, 
-				b -> b.languages(NewsLanguage.EN).countries(NewsCountry.US), 
-				ExtendsCallback.onSuccess(
-						(c, r) -> System.out.println(r.getSources().get(0).getName()), 
-						(c, t) -> System.out.println(t.getMessage())
-						)
-				);
+		NewsApiClient.SOURCES.executeQuery(API_KEY, b -> b.languages(NewsLanguage.EN).countries(NewsCountry.US), ExtendsCallback.onSuccess((c, r) -> System.out.println(r.getSources().get(0).getName()), (c, t) -> System.out.println(t.getMessage())));
 	}
 }
