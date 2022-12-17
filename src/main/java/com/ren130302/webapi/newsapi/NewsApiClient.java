@@ -22,7 +22,7 @@ public class NewsApiClient {
 
 	private static final String BASE_URL = "https://newsapi.org/";
 	private static final String API_LABEL = "apiKey";
-	private static final String API_KEY = "bb9f2ecdbb9a4882b51cf5a4b98b86a6";
+	private static final String API_KEY = "{your api key}";
 
 	public static ApiClient set() {
 		return ApiClient.set(API_LABEL, b -> b.baseUrl(BASE_URL).addConverterFactory(JacksonConverterFactory.create()));
