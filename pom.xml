@@ -11,13 +11,13 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/ren130302/web-api</url>
-        </repository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/ren130302/web-api</url>
+		</repository>
+	</distributionManagement>
 
 	<dependencies>
 		<dependency>
@@ -44,24 +44,24 @@
 			<artifactId>json</artifactId>
 			<version>20220320</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/com.sun.codemodel/codemodel -->
 		<dependency>
-		    <groupId>com.sun.codemodel</groupId>
-		    <artifactId>codemodel</artifactId>
-		    <version>2.4.1</version>
-		</dependency>  
+			<groupId>com.sun.codemodel</groupId>
+			<artifactId>codemodel</artifactId>
+			<version>2.4.1</version>
+		</dependency>
 
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.4</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.jsonschema2pojo</groupId>
-            <artifactId>jsonschema2pojo-core</artifactId>
-            <version>1.1.2</version>
-        </dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jsonschema2pojo</groupId>
+			<artifactId>jsonschema2pojo-core</artifactId>
+			<version>1.1.2</version>
+		</dependency>
 	</dependencies>
 </project>
