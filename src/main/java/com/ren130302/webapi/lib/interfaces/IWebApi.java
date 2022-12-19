@@ -39,8 +39,8 @@ public interface IWebApi<
 
 		// initialize queryMap
 		Map<String, String> queryMap = request.queryMap();
-		client.apiLabelOptional().ifPresent(apiLabel -> queryMap.put(apiLabel, apiKey));
 		request.builderOptional().ifPresent(builder -> queryMap.putAll(builder.initQueryMap(builderConsumer)));
+		client.apiLabelOptional().ifPresent(apiLabel -> queryMap.put(apiLabel, apiKey));
 
 		// ready to call service
 		Call<RESPONSE> call = request.urlMethod().apply(service, queryMap);

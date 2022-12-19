@@ -7,7 +7,7 @@ public final class Video {
 	public static class Builder
 		extends ApiBuilder {
 
-		public static Builder of(String id) {
+		public static Builder ofId(String id) {
 			return new Builder().id(id);
 		}
 

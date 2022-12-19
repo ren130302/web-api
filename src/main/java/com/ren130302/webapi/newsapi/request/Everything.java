@@ -1,21 +1,32 @@
 package com.ren130302.webapi.newsapi.request;
 
 import java.time.LocalDateTime;
-import java.util.function.Consumer;
 
 import com.ren130302.webapi.lib.ApiBuilder;
 import com.ren130302.webapi.lib.QueryUtils;
-import com.ren130302.webapi.lib.interfaces.IForm;
 import com.ren130302.webapi.newsapi.enums.NewsLanguage;
 import com.ren130302.webapi.newsapi.enums.NewsSearchIn;
 import com.ren130302.webapi.newsapi.enums.NewsSort;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 public final class Everything {
 
 	public static class Builder
 		extends ApiBuilder {
+
+		public static Builder ofQ(String q) {
+			return new Builder().q(q);
+		}
+
+		public static Builder ofSources(String[] sources) {
+			return new Builder().sources(sources);
+		}
+
+		public static Builder ofIncludeDomains(String[] includeDomains) {
+			return new Builder().includeDomains(includeDomains);
+		}
 
 		/**
 		 * Keywords or phrases to search for in the article title and body.<br>
@@ -143,12 +154,8 @@ public final class Everything {
 	}
 
 	@Data
-	public static class Form
-		implements IForm<Everything.Builder> {
-		@Override
-		public Consumer<Everything.Builder> wrap() {
-			return b -> b.q(this.getQ()).page(this.getPage()).pageSize(this.getPageSize()).includeDomains(this.getIncludeDomains()).excludeDomains(this.getExcludeDoamins()).sources(this.getSources()).language(this.getLanguages()).searchIn(this.getSearchIns()).from(this.getFrom().toString()).to(this.getTo().toString()).sortBy(this.getSortBy());
-		}
+	@Accessors(fluent = true)
+	public static class Form {
 
 		private String q = null;
 

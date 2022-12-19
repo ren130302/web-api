@@ -1,15 +1,13 @@
 package com.ren130302.webapi.newsapi.request;
 
-import java.util.function.Consumer;
-
 import com.ren130302.webapi.lib.ApiBuilder;
 import com.ren130302.webapi.lib.QueryUtils;
-import com.ren130302.webapi.lib.interfaces.IForm;
 import com.ren130302.webapi.newsapi.enums.NewsCategory;
 import com.ren130302.webapi.newsapi.enums.NewsCountry;
 import com.ren130302.webapi.newsapi.enums.NewsLanguage;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 public final class TopHeadlines {
 
@@ -100,12 +98,8 @@ public final class TopHeadlines {
 	}
 
 	@Data
-	public static class Form
-		implements IForm<TopHeadlines.Builder> {
-		@Override
-		public Consumer<TopHeadlines.Builder> wrap() {
-			return b -> b.q(this.getQ()).categories(this.getCategories()).countries(this.getCountries()).sources(this.getSources()).pageSize(this.getPageSize()).page(this.getPage());
-		}
+	@Accessors(fluent = true)
+	public static class Form {
 
 		private String q = null;
 
