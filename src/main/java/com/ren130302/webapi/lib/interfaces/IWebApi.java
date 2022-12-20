@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public interface IWebApi<
@@ -18,19 +17,19 @@ public interface IWebApi<
 
 	REQUEST request();
 
-	default void executeQuery(Callback<RESPONSE> callback) {
-		this.executeQuery(null, null, callback);
+	default Call<RESPONSE> ready() {
+		return this.ready(null, null);
 	}
 
-	default void executeQuery(Consumer<BUILDER> builderConsumer, Callback<RESPONSE> callback) {
-		this.executeQuery(null, builderConsumer, callback);
+	default Call<RESPONSE> ready(Consumer<BUILDER> builderConsumer) {
+		return this.ready(null, builderConsumer);
 	}
 
-	default void executeQuery(String apiKey, Callback<RESPONSE> callback) {
-		this.executeQuery(apiKey, null, callback);
+	default Call<RESPONSE> executeQuery(String apiKey) {
+		return this.ready(apiKey, null);
 	}
 
-	default void executeQuery(String apiKey, Consumer<BUILDER> builderConsumer, Callback<RESPONSE> callback) {
+	default Call<RESPONSE> ready(String apiKey, Consumer<BUILDER> builderConsumer) {
 		CLIENT client = this.client();
 		REQUEST request = this.request();
 
@@ -44,6 +43,6 @@ public interface IWebApi<
 
 		// ready to call service
 		Call<RESPONSE> call = request.urlMethod().apply(service, queryMap);
-		call.enqueue(callback);
+		return call;
 	}
 }

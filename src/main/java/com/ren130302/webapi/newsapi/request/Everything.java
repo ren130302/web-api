@@ -105,7 +105,7 @@ public final class Everything {
 		 * <br>
 		 * Default: all languages returned.<br>
 		 */
-		public Builder language(NewsLanguage... language) {
+		public Builder languages(NewsLanguage... language) {
 			return this.put("language", QueryUtils.enumValue(language, NewsLanguage.values()));
 		}
 
