@@ -3,7 +3,6 @@ package com.ren130302.webapi.pornhubapi;
 import com.ren130302.webapi.lib.ApiBuilder;
 import com.ren130302.webapi.lib.ApiClient;
 import com.ren130302.webapi.lib.ApiRequest;
-import com.ren130302.webapi.lib.ExtendsCallback;
 import com.ren130302.webapi.lib.WebApi;
 import com.ren130302.webapi.pornhubapi.request.Search;
 import com.ren130302.webapi.pornhubapi.request.Search.Builder;
@@ -31,15 +30,5 @@ public class PornhubApiClient {
 
 	public static ApiClient set() {
 		return ApiClient.set(b -> b.baseUrl(BASE_URL).addConverterFactory(JacksonConverterFactory.create()));
-	}
-
-	public static void main(String[] args) {
-		PornhubApiClient.STARS.executeQuery(ExtendsCallback.onSuccess((c, r) -> {
-			String starName = r.getStars().get(0).getStar().getStarName();
-			System.out.println(starName);
-		}, (c, t) -> {
-			String s = t.getMessage();
-			System.out.println(s);
-		}));
 	}
 }
