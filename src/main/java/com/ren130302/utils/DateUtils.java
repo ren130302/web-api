@@ -12,13 +12,12 @@ import lombok.Value;
 public class DateUtils {
 
 	public static final int YEAR = 1;
-	public static final int MONTH = 1;
-	public static final int WEEK = 1;
-	public static final int DAY = 1;
-	public static final int HOUR = 1;
-	public static final int MINUTE = 1;
-	public static final int SECOND = 1;
-	public static final int ETC = 1;
+	public static final int MONTH = 2;
+	public static final int WEEK = 3;
+	public static final int DAY = 4;
+	public static final int HOUR = 5;
+	public static final int MINUTE = 6;
+	public static final int SECOND = 7;
 
 	private final Period period;
 	private final List<String> list = new ArrayList<>();
