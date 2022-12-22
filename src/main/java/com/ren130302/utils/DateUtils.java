@@ -18,7 +18,7 @@ public class DateUtils {
 
 	public static void main(String[] args) {
 		String d = "2022-12-22T03:13:38Z";
-		final String timeAgo = of(d).add(Unit.YEARS, t -> text(t, "year", "years")).add(Unit.MONTHS, t -> text(t, "month", "months")).add(Unit.WEEKS, t -> text(t, "week", "weeks")).add(Unit.DAYS, t -> text(t, "day", "days")).add(Unit.HOURS, t -> text(t, "hour", "hours")).add(Unit.MINUTES, t -> text(t, "minute", "minutes")).add(Unit.SECONDS, t -> text(t, "second", "seconds")).print();
+		final String timeAgo = of(d).add(Unit.YEARS, "year", "years").add(Unit.MONTHS, "month", "months").add(Unit.WEEKS, "week", "weeks").add(Unit.DAYS, "day", "days").add(Unit.HOURS, "hour", "hours").add(Unit.MINUTES, "minute", "minutes").add(Unit.SECONDS, "second", "seconds").print();
 		System.out.println(timeAgo.isBlank() ? "today" : timeAgo);
 	}
 
@@ -33,9 +33,17 @@ public class DateUtils {
 		return DateUtils.of(DateTime.parse(dateTime));
 	}
 
-	public DateUtils add(Unit chronoUnit, Function<Integer, String> func) {
+	private DateUtils add(Unit chronoUnit, Function<Integer, String> func) {
 		this.list.put(chronoUnit, func);
 		return this;
+	}
+
+	public DateUtils add(Unit chronoUnit, String text) {
+		return this.add(chronoUnit, t -> text(t, text));
+	}
+
+	public DateUtils add(Unit chronoUnit, String singularText, String pluralText) {
+		return this.add(chronoUnit, t -> text(t, singularText, pluralText));
 	}
 
 	public String print() {
@@ -74,7 +82,7 @@ public class DateUtils {
 	 *            text to print if field value is not one
 	 * @return
 	 */
-	public static String text(int time, String text) {
+	private static String text(int time, String text) {
 		return String.format("%d %s", time, text);
 	}
 
@@ -86,7 +94,7 @@ public class DateUtils {
 	 *            text to print if field value is not one
 	 * @return
 	 */
-	public static String text(int time, String singularText, String pluralText) {
+	private static String text(int time, String singularText, String pluralText) {
 		final String text = time == 1 ? singularText : pluralText;
 
 		return String.format("%d %s", time, text);

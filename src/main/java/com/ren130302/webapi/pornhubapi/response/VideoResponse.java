@@ -7,29 +7,10 @@ import javax.annotation.processing.Generated;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import lombok.Data;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-		"duration",
-		"views",
-		"video_id",
-		"rating",
-		"ratings",
-		"title",
-		"url",
-		"default_thumb",
-		"thumb",
-		"publish_date",
-		"thumbs",
-		"tags",
-		"pornstars",
-		"categories",
-		"segment",
-		"is_active"
-})
 @Generated("jsonschema2pojo")
 @Data
 public class VideoResponse {
@@ -59,7 +40,7 @@ public class VideoResponse {
 	@JsonProperty("tags")
 	public List<Tag> tags = null;
 	@JsonProperty("pornstars")
-	public List<Object> pornstars = null;
+	public List<Pornstar> pornstars = null;
 	@JsonProperty("categories")
 	public List<Category> categories = null;
 	@JsonProperty("segment")
@@ -68,9 +49,6 @@ public class VideoResponse {
 	public String isActive;
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	@JsonPropertyOrder({
-			"tag_name"
-	})
 	@Generated("jsonschema2pojo")
 	@Data
 	public static class Tag {
@@ -81,25 +59,16 @@ public class VideoResponse {
 	}
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	@JsonPropertyOrder({
-			"tag_name"
-	})
 	@Generated("jsonschema2pojo")
 	@Data
 	public static class Category {
 
-		@JsonProperty("category_name")
-		public String categoryName;
+		@JsonProperty("category")
+		public String category;
 
 	}
 
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	@JsonPropertyOrder({
-			"size",
-			"width",
-			"height",
-			"src"
-	})
 	@Generated("jsonschema2pojo")
 	@Data
 	public static class Thumb {
@@ -115,4 +84,11 @@ public class VideoResponse {
 
 	}
 
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@Generated("jsonschema2pojo")
+	@Data
+	public static class Pornstar {
+		@JsonProperty("pornstar_name")
+		public String pornstarName;
+	}
 }

@@ -1,5 +1,7 @@
 package com.ren130302.webapi.pornhubapi.request;
 
+import java.util.Objects;
+
 import com.ren130302.webapi.lib.ApiBuilder;
 
 public final class Search {
@@ -22,8 +24,8 @@ public final class Search {
 			return this;
 		}
 
-		public Builder page(String q) {
-			this.put("page", q);
+		public Builder page(Integer q) {
+			this.put("page", String.valueOf(Objects.requireNonNullElse(q, 1)));
 			return this;
 		}
 
